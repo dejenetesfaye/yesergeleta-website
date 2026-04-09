@@ -43,9 +43,14 @@
   <div id="landing-page">
     <nav id="navbar">
       <div class="container">
-        <a href="#" class="logo">
-          <img src="/images/logo.png" alt="Yesergeleta Logo">
-        </a>
+        <div class="nav-branding">
+          <a href="#" class="logo">
+            <img src="/images/logo.png" alt="Yesergeleta Logo">
+          </a>
+          <button id="mobile-menu-toggle" class="mobile-toggle">
+            <i data-lucide="menu"></i>
+          </button>
+        </div>
         <ul class="nav-links">
           <li><a href="#themes" data-i18n="nav.themes">Themes</a></li>
           <li><a href="#services" data-i18n="nav.services">Services</a></li>
@@ -479,7 +484,7 @@
           <div class="section-header reveal">
             <h2 data-i18n="contact.title">Get In Touch</h2>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px;">
+          <div class="contact-grid">
             <div class="reveal">
               <div class="service-item" style="margin-bottom: 20px;">
                 <div class="service-icon"><i data-lucide="map-pin"></i></div>
@@ -504,7 +509,7 @@
               </div>
             </div>
             <div class="reveal">
-              <form class="order-form" style="width: 100%; padding: 30px;">
+              <form class="order-form">
                 <div class="form-group" style="margin-bottom: 15px;">
                   <input type="text" placeholder="Your Name" data-i18n-placeholder="order.placeholderName">
                 </div>

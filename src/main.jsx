@@ -180,8 +180,21 @@ function initLandingPage() {
       const targetElement = document.querySelector(this.getAttribute('href'));
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth' });
+        
+        // Close mobile menu if open
+        const navLinks = document.querySelector('.nav-links');
+        if (navLinks) navLinks.classList.remove('open');
       }
     });
   });
+
+  // Mobile Menu Toggle
+  const menuToggle = document.getElementById('mobile-menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  if (menuToggle && navLinks) {
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+  }
 }
 
