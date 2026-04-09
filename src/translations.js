@@ -57,7 +57,7 @@ export const translations = {
       service4Title: "QR Invitations",
       service4Desc: "Easy access for guests via custom QR codes.",
       service5Title: "Custom Domain",
-      service5Desc: "Your own unique link (e.g., yeneserg.com/your-name).",
+      service5Desc: "Your own unique link (e.g., yesergeleta.com/your-name).",
       service6Title: "24/7 Support",
       service6Desc: "We are here to help you until the big day."
     },
@@ -207,7 +207,7 @@ export const translations = {
       service4Title: "QR ኮድ የጥሪ ካርድ",
       service4Desc: "እንግዶች በቀላሉ በQR ኮድ መግባት ይችላሉ።",
       service5Title: "ልዩ ሊንክ",
-      service5Desc: "የራስዎ ልዩ ሊንክ (ለምሳሌ yeneserg.com/እርስዎ)።",
+      service5Desc: "የራስዎ ልዩ ሊንክ (ለምሳሌ yesergeleta.com/እርስዎ)።",
       service6Title: "ሙሉ ድጋፍ",
       service6Desc: "እስከ ሰርግዎ ቀን ድረስ ከጎንዎ ነን።"
     },
