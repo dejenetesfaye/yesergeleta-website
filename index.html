@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yesergeleta | Premium Digital Wedding Invitations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Great+Vibes&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css" />
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <div id="landing-page">
+    <nav id="navbar">
+      <div class="container">
+        <div class="nav-branding">
+          <a href="#landing-page" class="logo">
+            <img src="/images/logo.png" alt="Yesergeleta Logo">
+          </a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#themes" data-i18n="nav.themes">Themes</a></li>
+          <li><a href="#services" data-i18n="nav.services">Services</a></li>
+          <li><a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a></li>
+          <li><a href="#pricing" data-i18n="nav.pricing">Pricing</a></li>
+          <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+
+          <select id="lang-switcher" class="lang-switcher">
+            <option value="en">EN</option>
+            <option value="am">AM</option>
+          </select>
+          <button id="mobile-menu-toggle" class="mobile-toggle">
+            <i data-lucide="menu"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <button id="theme-toggle" class="dark-mode-toggle" title="Toggle Dark Mode">
+      <i data-lucide="moon"></i>
+    </button>
+
+    <main>
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="container hero-content">
+          <h1 class="reveal" data-i18n="hero.title">Create Your Dream Digital Wedding Invitation</h1>
+          <p class="reveal hidden md:block" data-i18n="hero.subtitle">Elegant, responsive, and culturally inspired invitations for your
+            special day. Share your love
+            story with a touch of modern luxury.</p>
+          <div class="btn-group reveal">
+            <a href="#themes" class="btn btn-primary" data-i18n="hero.browseThemes">Browse Themes</a>
+            <a href="#order" class="btn btn-outline" data-i18n="hero.startOrder">Start Order</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Best Selling Wedding Themes -->
+      <section id="themes" class="themes">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2 data-i18n="themes.title">Best Selling Wedding Themes</h2>
+            <p data-i18n="themes.subtitle">Choose from our curated collection of premium templates designed to suit
+              every
+              style.</p>
+          </div>
+
+          <h3 class="reveal"
+            style="text-align: center; font-family: 'Cinzel', serif; font-weight: 800; margin-bottom: 20px; color: #0d0d0d;"
+            data-i18n="categories.title">Browse by Category</h3>
+          <div class="filter-group reveal">
+            <button class="filter-btn active" data-filter="all" data-i18n="themes.filterAll">All</button>
+            <button class="filter-btn" data-filter="traditional"
+              data-i18n="themes.filterTraditional">Traditional</button>
+            <button class="filter-btn" data-filter="modern" data-i18n="themes.filterModern">Modern</button>
+            <button class="filter-btn" data-filter="cultural" data-i18n="themes.filterEthiopian">Ethiopian</button>
+            <button class="filter-btn" data-filter="minimalist" data-i18n="themes.filterMinimalist">Minimalist</button>
+          </div>
+
+          <div class="theme-grid reveal">
+            <!-- Theme 1: Luxury Magazine -->
+            <div class="theme-card" data-category="traditional cultural">
+              <div class="theme-img">
+                <img src="/images/temp1.webp" alt="Traditional Theme">
+                <div class="theme-overlay">
+                  <h4>Victoria & Alexander</h4>
+                  <span class="date-loc">September 14, 2026</span>
+                </div>
+              </div>
+              <div class="theme-info">
+                <div class="theme-header">
+                  <h3 data-i18n="themes.card1Title">Luxury Magazine</h3>
+                  <button class="btn-preview" data-preview="/amelia_and_james">Preview</button>
+                </div>
+                <a href="#contact" class="btn-contact">Contact Us</a>
+              </div>
+            </div>
+
+            <!-- Theme 2: Aurora Glass -->
+            <div class="theme-card" data-category="modern">
+              <div class="theme-img">
+                <img src="/images/temp2.jpg" alt="Modern Theme">
+                <div class="theme-overlay">
+                  <h4>Sienna & Kai</h4>
+                  <span class="date-loc">November 29, 2026</span>
+                </div>
+              </div>
+              <div class="theme-info">
+                <div class="theme-header">
+                  <h3 data-i18n="themes.card2Title">Aurora Glass</h3>
+                  <button class="btn-preview" data-preview="/sophia_and_oliver">Preview</button>
+                </div>
+                <a href="#contact" class="btn-contact">Contact Us</a>
+              </div>
+            </div>
+
+            <!-- Theme 3: Vintage Retro -->
+            <div class="theme-card" data-category="cultural traditional">
+              <div class="theme-img">
+                <img src="/images/temp3.webp" alt="Royal Habesha Theme">
+                <div class="theme-overlay">
+                  <h4>Mia & Leo</h4>
+                  <span class="date-loc">August 22, 2026</span>
+                </div>
+              </div>
+              <div class="theme-info">
+                <div class="theme-header">
+                  <h3 data-i18n="themes.card3Title">Vintage Retro</h3>
+                  <button class="btn-preview" data-preview="/mia_and_leo" data-i18n="themes.preview">Preview</button>
+                </div>
+                <a href="#contact" class="btn-contact">Contact Us</a>
+              </div>
+            </div>
+
+            <!-- Theme 4: Midnight Noir -->
+            <div class="theme-card" data-category="modern floral">
+              <div class="theme-img">
+                <img src="/images/temp4.jpg" alt="Floral Theme">
+                <div class="theme-overlay">
+                  <h4>Noah & Eve</h4>
+                  <span class="date-loc">September 10, 2026</span>
+                </div>
+              </div>
+              <div class="theme-info">
+                <div class="theme-header">
+                  <h3 data-i18n="themes.card4Title">Midnight Noir</h3>
+                  <button class="btn-preview" data-preview="/noah_and_eve" data-i18n="themes.preview">Preview</button>
+                </div>
+                <a href="#contact" class="btn-contact">Contact Us</a>
+              </div>
+            </div>
+
+            <!-- Theme 5: Liquid Blob -->
+            <div class="theme-card" data-category="minimalist modern">
+              <div class="theme-img">
+                <img src="/images/temp5.jpg" alt="Minimalist Theme">
+                <div class="theme-overlay">
+                  <h4>Maya & Sam</h4>
+                  <span class="date-loc">July 14, 2026</span>
+                </div>
+              </div>
+              <div class="theme-info">
+                <div class="theme-header">
+                  <h3 data-i18n="themes.card5Title">Liquid Blob</h3>
+                  <button class="btn-preview" data-preview="/maya_and_sam" data-i18n="themes.preview">Preview</button>
+                </div>
+                <a href="#contact" class="btn-contact">Contact Us</a>
+              </div>
+            </div>
+
+            <!-- Theme 6: Celestial Cosmos -->
+            <div class="theme-card" data-category="minimalist modern">
+              <div class="theme-img">
+                <img src="/images/temp6.jpg" alt="Minimalist Theme">
+                <div class="theme-overlay">
+                  <h4>Luna & Nova</h4>
+                  <span class="date-loc">July 14, 2026</span>
+                </div>
+              </div>
+              <div class="theme-info">
+                <div class="theme-header">
+                  <h3 data-i18n="themes.card6Title">Celestial Cosmos</h3>
+                  <button class="btn-preview" data-preview="/luna_and_nova" data-i18n="themes.preview">Preview</button>
+                </div>
+                <a href="#contact" class="btn-contact">Contact Us</a>
+              </div>
+            </div>
+
+            <!-- Theme 7: Royal Habesha (new) -->
+            <div class="theme-card" data-category="traditional cultural ethiopian">
+              <div class="theme-img">
+                <img src="/images/couple_3.jpg" alt="Royal Habesha Theme">
+                <div class="theme-overlay">
+                  <h4>Selam & Dawit</h4>
+                  <span class="date-loc">October 5, 2026</span>
+                </div>
+              </div>
+              <div class="theme-info">
+                <div class="theme-header">
+                  <h3 data-i18n="themes.card7Title">Royal Habesha</h3>
+                  <button class="btn-preview" data-preview="/selam_and_dawit" data-i18n="themes.preview">Preview</button>
+                </div>
+                <a href="#contact" class="btn-contact">Contact Us</a>
+              </div>
+            </div>
+
+            <!-- Theme 8: Golden Meskel (new) -->
+            <div class="theme-card" data-category="traditional ethiopian">
+              <div class="theme-img">
+                <img src="/images/couple_4.jpg" alt="Golden Meskel Theme">
+                <div class="theme-overlay">
+                  <h4>Miriam & Solomon</h4>
+                  <span class="date-loc">December 20, 2026</span>
+                </div>
+              </div>
+              <div class="theme-info">
+                <div class="theme-header">
+                  <h3 data-i18n="themes.card8Title">Golden Meskel</h3>
+                  <button class="btn-preview" data-preview="/miriam_and_solomon" data-i18n="themes.preview">Preview</button>
+                </div>
+                <a href="#contact" class="btn-contact">Contact Us</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Preview Modal -->
+      <div id="preview-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); flex-direction:column; align-items:center; justify-content:center;">
+        <div style="width:95vw; max-width:1400px; height:90vh; background:#111; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,0.8);">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:#1a1a1a; border-bottom:1px solid rgba(255,255,255,0.08);">
+            <span id="modal-title" style="color:#D4AF37; font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:600; letter-spacing:0.05em;">Invitation Preview</span>
+            <div style="display:flex; gap:12px; align-items:center;">
+              <a id="modal-open-link" href="#" target="_blank" style="padding:6px 14px; border:1px solid #D4AF37; border-radius:6px; color:#D4AF37; font-size:0.78rem; font-family:'Montserrat',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; text-decoration:none;">Open Full Page</a>
+              <button id="modal-close" style="width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); border:none; color:white; cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center;">✕</button>
+            </div>
+          </div>
+          <iframe id="preview-iframe" src="" style="flex:1; border:none; width:100%;" title="Template Preview"></iframe>
+        </div>
+      </div>
+
+      <!-- Categories Section -->
+      <section class="categories">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2 data-i18n="categories.title">Browse by Category</h2>
+          </div>
+          <div class="category-grid reveal">
+            <div class="cat-card">
+              <div class="cat-icon"><i data-lucide="award"></i></div>
+              <h3 data-i18n="categories.luxury">Luxury</h3>
+            </div>
+            <div class="cat-card">
+              <div class="cat-icon"><i data-lucide="palmtree"></i></div>
+              <h3 data-i18n="categories.cultural">Cultural</h3>
+            </div>
+            <div class="cat-card">
+              <div class="cat-icon"><i data-lucide="layers"></i></div>
+              <h3 data-i18n="categories.minimalist">Minimalist</h3>
+            </div>
+            <div class="cat-card">
+              <div class="cat-icon"><i data-lucide="heart"></i></div>
+              <h3 data-i18n="categories.modern">Modern</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Our Services -->
+      <section id="services">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2 data-i18n="services.title">Our Services</h2>
+            <p data-i18n="services.subtitle">Everything you need for a perfect digital invitation experience.</p>
+          </div>
+          <div class="services-grid">
+            <div class="service-item reveal">
+              <div class="service-icon"><i data-lucide="pen-tool"></i></div>
+              <div>
+                <h3 data-i18n="services.service1Title">Custom Design</h3>
+                <p data-i18n="services.service1Desc">Tailored designs that match your unique wedding vision.</p>
+              </div>
+            </div>
+            <div class="service-item reveal">
+              <div class="service-icon"><i data-lucide="video"></i></div>
+              <div>
+                <h3 data-i18n="services.service2Title">Video Integration</h3>
+                <p data-i18n="services.service2Desc">Embed your save-the-date videos directly in the invitation.</p>
+              </div>
+            </div>
+            <div class="service-item reveal">
+              <div class="service-icon"><i data-lucide="check-square"></i></div>
+              <div>
+                <h3 data-i18n="services.service3Title">RSVP Tracking</h3>
+                <p data-i18n="services.service3Desc">Manage your guest list with an automated RSVP system.</p>
+              </div>
+            </div>
+            <div class="service-item reveal">
+              <div class="service-icon"><i data-lucide="qr-code"></i></div>
+              <div>
+                <h3 data-i18n="services.service4Title">QR Invitations</h3>
+                <p data-i18n="services.service4Desc">Easy access for guests via custom QR codes.</p>
+              </div>
+            </div>
+            <div class="service-item reveal">
+              <div class="service-icon"><i data-lucide="globe"></i></div>
+              <div>
+                <h3 data-i18n="services.service5Title">Custom Domain</h3>
+                <p data-i18n="services.service5Desc">Your own unique link (e.g., yesergeleta.com/your-name).</p>
+              </div>
+            </div>
+            <div class="service-item reveal">
+              <div class="service-icon"><i data-lucide="headphones"></i></div>
+              <div>
+                <h3 data-i18n="services.service6Title">24/7 Support</h3>
+                <p data-i18n="services.service6Desc">We are here to help you until the big day.</p>
+              </div>
+            </div>
+            <div class="service-item reveal">
+              <div class="service-icon"><i data-lucide="music"></i></div>
+              <div>
+                <h3>Background Music</h3>
+                <p>Set the perfect mood with your favourite song playing in the background.</p>
+              </div>
+            </div>
+            <div class="service-item reveal">
+              <div class="service-icon"><i data-lucide="users"></i></div>
+              <div>
+                <h3>Bridal Party Showcase</h3>
+                <p>Beautifully display your bridesmaids and groomsmen with photos and messages.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- How It Works -->
+      <section id="how-it-works" class="bg-soft">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2 data-i18n="howItWorks.title">How It Works</h2>
+            <p data-i18n="howItWorks.subtitle">Get your luxury invitation ready in 5 simple steps.</p>
+          </div>
+          <div class="timeline">
+            <div class="step left reveal">
+              <div class="step-content">
+                <h3 data-i18n="howItWorks.step1Title">1. Choose a Template</h3>
+                <p data-i18n="howItWorks.step1Desc">Browse our premium collection and pick your favorite.</p>
+              </div>
+            </div>
+            <div class="step right reveal">
+              <div class="step-content">
+                <h3 data-i18n="howItWorks.step2Title">2. Fill Your Details</h3>
+                <p data-i18n="howItWorks.step2Desc">Provide your wedding info, photos, and messages.</p>
+              </div>
+            </div>
+            <div class="step left reveal">
+              <div class="step-content">
+                <h3 data-i18n="howItWorks.step3Title">3. Review & Confirm</h3>
+                <p data-i18n="howItWorks.step3Desc">Check the preview and make any necessary changes.</p>
+              </div>
+            </div>
+            <div class="step right reveal">
+              <div class="step-content">
+                <h3 data-i18n="howItWorks.step4Title">4. Make Payment</h3>
+                <p data-i18n="howItWorks.step4Desc">Secure payment via your preferred method.</p>
+              </div>
+            </div>
+            <div class="step left reveal">
+              <div class="step-content">
+                <h3 data-i18n="howItWorks.step5Title">5. Get Your Link</h3>
+                <p data-i18n="howItWorks.step5Desc">Receive your live wedding website link instantly.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pricing -->
+      <section id="pricing" class="pricing">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2 data-i18n="pricing.title">Simple Pricing</h2>
+            <p data-i18n="pricing.subtitle">Choose the plan that fits your celebration.</p>
+          </div>
+          <div class="pricing-grid">
+            <div class="price-card reveal">
+              <div class="price-header">
+                <h3 data-i18n="pricing.tier1Title">Classic</h3>
+                <div class="price-val">10,000 ETB</div>
+              </div>
+              <ul class="price-features">
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier1Feature1">Galley 3</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier1Feature2">Countdown</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier1Feature3">Location 1</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier1Feature4">Language support 1</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier1Feature5">RSVP Form</span></li>
+              </ul>
+              <a href="#order" class="btn btn-outline" data-i18n="pricing.btnTier1">Choose Classic</a>
+            </div>
+            <div class="price-card reveal">
+              <div class="price-header">
+                <h3 data-i18n="pricing.tier2Title">Elegant</h3>
+                <div class="price-val" data-i18n="pricing.tier2Price">13,000 ETB</div>
+              </div>
+              <ul class="price-features">
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier2Feature1">Galley 10</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier2Feature2">Countdown</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier2Feature3">Location 2</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier2Feature4">Timeline</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier2Feature5">Bridesmaids / Groomsmen</span>
+                </li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier2Feature6">Blessing and wishes</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier2Feature7">RSVP Form</span></li>
+              </ul>
+              <a href="#order" class="btn btn-outline" data-i18n="pricing.btnTier2">Choose Elegant</a>
+            </div>
+            <div class="price-card popular reveal">
+              <div class="price-header">
+                <h3 data-i18n="pricing.tier3Title">Royal</h3>
+                <div class="price-val" data-i18n="pricing.tier3Price">17,000 ETB</div>
+              </div>
+              <ul class="price-features">
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier3Feature1">Galley (Unlimited)</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier3Feature2">Countdown</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier3Feature3">Location 3</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier3Feature4">Timeline</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier3Feature5">Our Love Story</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier3Feature6">Telegram Bot</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier3Feature7">Bridesmaids / Groomsmen</span>
+                </li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier3Feature8">Blessing and wishes</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier3Feature9">FAQ</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier3Feature10">RSVP Form</span></li>
+              </ul>
+              <a href="#order" class="btn btn-primary" data-i18n="pricing.btnTier3">Choose Royal</a>
+            </div>
+
+
+            <div class="price-card reveal">
+              <div class="price-header">
+                <h3 data-i18n="pricing.tier4Title">Imperial</h3>
+                <div class="price-val" data-i18n="pricing.tier4Price">27,000 ETB</div>
+              </div>
+              <ul class="price-features">
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature1">Galley (Unlimited)</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature2">Countdown</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature3">Location 3</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature4">Timeline</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature5">Video Integration</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature6">About Us</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature7">Our Love Story</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature8">Telegram Bot</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature9">Background Music</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature10">Bridesmaids / Groomsmen</span>
+                </li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature11">Blessing and wishes</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature12">FAQ</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature13">RSVP Form</span></li>
+                <li><i data-lucide="check"></i> <span data-i18n="pricing.tier4Feature14">QR Code Entry</span></li>
+              </ul>
+              <a href="#order" class="btn btn-outline" data-i18n="pricing.btnTier4">Choose Imperial</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Order Form -->
+      <section id="order">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2 data-i18n="order.title">Order Your Invitation Today</h2>
+            <p data-i18n="order.subtitle">Start your journey with us. Fill in the details below.</p>
+          </div>
+          <div class="order-form reveal">
+            <form id="invite-form">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label data-i18n="order.fullName">Full Name</label>
+                  <input type="text" id="order-name" placeholder="Your Name" data-i18n-placeholder="order.placeholderName" required>
+                </div>
+                <div class="form-group">
+                  <label data-i18n="order.phone">Phone Number</label>
+                  <input type="tel" id="order-phone" placeholder="+251 ..." required>
+                </div>
+                <div class="form-group">
+                  <label data-i18n="order.weddingDate">Wedding Date</label>
+                  <input type="date" id="order-date" required>
+                </div>
+                <div class="form-group">
+                  <label data-i18n="order.theme">Selected Theme</label>
+                  <select id="order-theme">
+                    <option>White Horse</option>
+                    <option>Luxury</option>
+                    <option>Royal</option>
+                    <option>Floral Romance</option>
+                    <option>Essential Gold</option>
+                    <option>Full Gold</option>
+                  </select>
+                </div>
+                <div class="form-group full">
+                  <label data-i18n="order.message">Message / Additional Info</label>
+                  <textarea rows="4" id="order-message" placeholder="Any special requests?"
+                    data-i18n-placeholder="order.placeholderInfo"></textarea>
+                </div>
+              </div>
+              <div class="social-order-buttons">
+                <a href="#" id="order-tg-btn" class="btn btn-primary btn-social" target="_blank" rel="noopener noreferrer">
+                  <i data-lucide="send"></i>
+                  <span class="btn-text">Order via Telegram</span>
+                </a>
+                <a href="#" id="order-wa-btn" class="btn btn-outline btn-social" target="_blank" rel="noopener noreferrer">
+                  <i data-lucide="message-circle"></i>
+                  <span class="btn-text">Order via WhatsApp</span>
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact" class="bg-soft">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2 data-i18n="contact.title">Get In Touch</h2>
+          </div>
+          <div class="contact-grid">
+            <div class="reveal">
+              <div class="service-item" style="margin-bottom: 20px;">
+                <div class="service-icon"><i data-lucide="map-pin"></i></div>
+                <div>
+                  <h3 data-i18n="contact.office">Our Office</h3>
+                  <p>Addis Ababa, Ethiopia</p>
+                </div>
+              </div>
+              <div class="service-item" style="margin-bottom: 20px;">
+                <div class="service-icon"><i data-lucide="phone"></i></div>
+                <div>
+                  <h3 data-i18n="contact.callUs">Call Us</h3>
+                  <p>+251 911 834 473</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-icon"><i data-lucide="mail"></i></div>
+                <div>
+                  <h3>Email</h3>
+                  <p>support@yesergeleta.com</p>
+                </div>
+              </div>
+            </div>
+            <div class="reveal">
+              <form class="order-form" id="contact-form">
+                <div class="form-group" style="margin-bottom: 15px;">
+                  <input type="text" id="contact-name" placeholder="Your Name" data-i18n-placeholder="order.placeholderName">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                  <input type="email" id="contact-email" placeholder="Email Address" data-i18n-placeholder="contact.placeholderEmail">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                  <textarea rows="4" id="contact-message" placeholder="Your Message"
+                    data-i18n-placeholder="contact.placeholderMsg"></textarea>
+                </div>
+                <button type="submit" id="contact-submit-btn" class="btn btn-primary" style="width: 100%; border: none;"
+                  data-i18n="contact.sendMsg">Send Message</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <a href="#" class="logo" style="margin-bottom: 20px;">
+              <img src="/images/logo.png" alt="Yesergeleta Logo" style="height: 200px;">
+            </a>
+            <p>Crafting dream digital invitations for your most memorable moments.</p>
+            <div class="social-links">
+              <a href="https://t.me/yesergeleta" target="_blank" title="Telegram">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" x2="11" y1="2" y2="13" />
+                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+              </a>
+              <a href="https://instagram.com/yesergeleta" target="_blank" title="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                </svg>
+              </a>
+              <a href="https://facebook.com/yesergeleta" target="_blank" title="Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4 data-i18n="footer.quickLinks">Quick Links</h4>
+            <ul>
+              <li><a href="#themes" data-i18n="nav.themes">Themes</a></li>
+              <li><a href="#services" data-i18n="nav.services">Services</a></li>
+              <li><a href="#pricing" data-i18n="nav.pricing">Pricing</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 data-i18n="nav.services">Services</h4>
+            <ul>
+              <li><a href="#" data-i18n="services.service1Title">Custom Design</a></li>
+              <li><a href="#" data-i18n="services.service3Title">RSVP Tracking</a></li>
+              <li><a href="#" data-i18n="services.service4Title">QR Codes</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 data-i18n="nav.contact">Contact Info</h4>
+            <ul>
+              <li>Addis Ababa, Ethiopia</li>
+              <li>+251 911 834 473</li>
+              <li>info@yesergeleta.com</li>
+            </ul>
+          </div>
+        </div>
+        <div class="copyright">
+          <p data-i18n="footer.copyright">&copy; 2026 Yesergeleta. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div id="wedding-invitation" style="display: none;"></div>
+
+  <script>
+    // Dark mode toggle logic for landing page
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const landingPageDiv = document.getElementById('landing-page');
+
+    if (themeToggleBtn && landingPageDiv) {
+      themeToggleBtn.addEventListener('click', () => {
+        landingPageDiv.classList.toggle('dark-mode');
+        const isDark = landingPageDiv.classList.contains('dark-mode');
+
+        // Update icon
+        themeToggleBtn.innerHTML = isDark
+          ? '<i data-lucide="sun"></i>'
+          : '<i data-lucide="moon"></i>';
+
+        // Re-initialize icons
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+      });
+    }
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  </script>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>
