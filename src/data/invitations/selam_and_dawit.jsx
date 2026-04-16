@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Music } from 'lucide-react';
+import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Music, Menu, X } from 'lucide-react';
 
 const P = {
   bg: '#FDF5EE', bgD: '#1A0808',
@@ -188,11 +188,22 @@ function FAQ({ dark }) {
 export default function SelamAndDawit() {
   const [dark, setD] = useState(false);
   const [sc, setSc] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const cd = useCD('2026-10-05T15:00:00');
   useEffect(() => {
-    const fn = () => setSc(window.scrollY > 60);
-    window.addEventListener('scroll', fn);
-    return () => window.removeEventListener('scroll', fn);
+    const handleScroll = () => setSc(window.scrollY > 60);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    
+    handleScroll();
+    handleResize();
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const bg = dark ? P.bgD : P.bg;
@@ -207,22 +218,48 @@ export default function SelamAndDawit() {
       <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Noto+Serif+Ethiopic:wght@400;600;700&display=swap" rel="stylesheet" />
 
       {/* NAV */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: sc ? (dark ? 'rgba(26,8,8,0.96)' : 'rgba(253,245,238,0.96)') : 'transparent', backdropFilter: sc ? 'blur(10px)' : 'none', borderBottom: sc ? `2px solid ${P.gold}` : 'none', transition: 'all 0.4s', padding: '0 40px', height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, background: sc ? (dark ? 'rgba(26,8,8,0.96)' : 'rgba(253,245,238,0.96)') : 'transparent', backdropFilter: sc ? 'blur(10px)' : 'none', borderBottom: sc ? `2px solid ${P.gold}` : 'none', transition: 'all 0.4s', padding: isMobile ? '0 20px' : '0 40px', height: isMobile ? 64 : 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 32, height: 32, position: 'relative' }}>
+          <div style={{ width: isMobile ? 24 : 32, height: isMobile ? 24 : 32, position: 'relative' }}>
             <div style={{ position: 'absolute', inset: 0, border: `2px solid ${P.gold}`, transform: 'rotate(45deg)' }} />
-            <div style={{ position: 'absolute', inset: 6, background: P.crim, transform: 'rotate(45deg)' }} />
+            <div style={{ position: 'absolute', inset: isMobile ? 4 : 6, background: P.crim, transform: 'rotate(45deg)' }} />
           </div>
-          <span style={{ fontFamily: "'Lora', serif", fontSize: '1.2rem', color: p, fontStyle: 'italic' }}>ሰላም & ዳዊት</span>
+          <span style={{ fontFamily: "'Lora', serif", fontSize: isMobile ? '1rem' : '1.2rem', color: p, fontStyle: 'italic' }}>ሰላም & ዳዊት</span>
         </div>
-        <div style={{ display: 'flex', gap: 28 }}>
-          {['About', 'Story', 'Timeline', 'Locations', 'Gallery', 'Party', 'Wishes', 'RSVP'].map(l => (
-            <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.75rem', fontFamily: "'Lora', serif", letterSpacing: '0.1em', color: mut, textDecoration: 'none', textTransform: 'uppercase' }}>{l}</a>
-          ))}
+
+        {!isMobile ? (
+          <div style={{ display: 'flex', gap: 28 }}>
+            {['About', 'Story', 'Timeline', 'Locations', 'Gallery', 'Party', 'Wishes', 'RSVP'].map(l => (
+              <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.75rem', fontFamily: "'Lora', serif", letterSpacing: '0.1em', color: mut, textDecoration: 'none', textTransform: 'uppercase' }}>{l}</a>
+            ))}
+          </div>
+        ) : (
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', color: p, cursor: 'pointer', padding: 8 }}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={() => setD(!dark)} style={{ background: 'none', border: `2px solid ${P.gold}`, borderRadius: 4, padding: '6px 10px', color: P.gold, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+            {dark ? <Sun size={14} /> : <Moon size={14} />}
+          </button>
         </div>
-        <button onClick={() => setD(!dark)} style={{ background: 'none', border: `2px solid ${P.gold}`, borderRadius: 4, padding: '6px 10px', color: P.gold, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-          {dark ? <Sun size={14} /> : <Moon size={14} />}
-        </button>
+
+        {/* Mobile Dropdown */}
+        <AnimatePresence>
+          {isMobile && menuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              style={{ position: 'absolute', top: 64, left: 0, right: 0, background: dark ? '#1A0808' : '#FDF5EE', borderBottom: `2px solid ${P.gold}`, padding: '20px', display: 'flex', flexDirection: 'column', gap: 16, zIndex: 999 }}
+            >
+              {['About', 'Story', 'Timeline', 'Locations', 'Gallery', 'Party', 'Wishes', 'RSVP'].map(l => (
+                <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} style={{ fontSize: '0.9rem', fontFamily: "'Lora', serif", letterSpacing: '0.1em', color: txt, textDecoration: 'none', textTransform: 'uppercase', textAlign: 'center' }}>{l}</a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* HERO */}
@@ -249,17 +286,17 @@ export default function SelamAndDawit() {
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: `linear-gradient(to right, ${P.crim}, ${P.gold}, ${P.emerald}, ${P.gold}, ${P.crim})` }} />
         <p style={{ fontFamily: "'Lora', serif", fontStyle: 'italic', color: P.gold, fontSize: '1rem', marginBottom: 6 }}>Counting down to our celebration</p>
         <p style={{ fontFamily: "'Noto Serif Ethiopic', serif", color: mut, fontSize: '0.9rem', marginBottom: 30 }}>ድሎታችን ድረስ</p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap' }}>
-          {[['Days', cd.d], ['Hours', cd.h], ['Minutes', cd.m], ['Seconds', cd.s]].map(([l, v]) => (
-            <div key={l} style={{ textAlign: 'center' }}>
-              <div style={{ width: 90, height: 90, border: `2px solid ${P.gold}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', background: card, position: 'relative' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 8 : 20, flexWrap: 'nowrap', overflow: 'hidden' }}>
+          {[['Days', cd.d], ['Hours', cd.h], ['Min', cd.m], ['Sec', cd.s]].map(([l, v]) => (
+            <div key={l} style={{ textAlign: 'center', minWidth: 0 }}>
+              <div style={{ width: isMobile ? 70 : 90, height: isMobile ? 70 : 90, border: `2px solid ${P.gold}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', background: card, position: 'relative' }}>
                 <div style={{ position: 'absolute', top: -4, left: -4, width: 8, height: 8, background: P.crim, transform: 'rotate(45deg)' }} />
                 <div style={{ position: 'absolute', top: -4, right: -4, width: 8, height: 8, background: P.crim, transform: 'rotate(45deg)' }} />
                 <div style={{ position: 'absolute', bottom: -4, left: -4, width: 8, height: 8, background: P.crim, transform: 'rotate(45deg)' }} />
                 <div style={{ position: 'absolute', bottom: -4, right: -4, width: 8, height: 8, background: P.crim, transform: 'rotate(45deg)' }} />
-                <span style={{ fontFamily: "'Libre Baskerville', serif", fontSize: '2rem', fontWeight: 700, color: p }}>{String(v).padStart(2, '0')}</span>
+                <span style={{ fontFamily: "'Libre Baskerville', serif", fontSize: isMobile ? '1.4rem' : '2rem', fontWeight: 700, color: p }}>{String(v).padStart(2, '0')}</span>
               </div>
-              <span style={{ fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: mut, fontFamily: "'Lora', serif" }}>{l}</span>
+              <span style={{ fontSize: isMobile ? '0.55rem' : '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: mut, fontFamily: "'Lora', serif", whiteSpace: 'nowrap' }}>{l}</span>
             </div>
           ))}
         </div>

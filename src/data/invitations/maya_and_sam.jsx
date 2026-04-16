@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp } from 'lucide-react';
+import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 
 const P = {
   bg:'#FAF8FF', bgD:'#12101A',
@@ -139,9 +139,25 @@ function FAQ({dark}){
 }
 
 export default function MayaAndSam(){
-  const[dark,setD]=useState(false);const[sc,setSc]=useState(false);
-  const cd=useCD('2026-07-14T15:00:00');
-  useEffect(()=>{const fn=()=>setSc(window.scrollY>60);window.addEventListener('scroll',fn);return()=>window.removeEventListener('scroll',fn);},[]);
+  const[dark,setD]=useState(false);  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [sc, setSc] = useState(false);
+  const cd = useCD('2026-06-12T17:00:00');
+
+  useEffect(() => {
+    const handleScroll = () => setSc(window.scrollY > 60);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    
+    handleScroll();
+    handleResize();
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const bg=dark?P.bgD:P.bg;const card=dark?P.cardD:P.card;const p=dark?P.priD:P.pri;
   const acc=dark?P.accD:P.acc;const mint=dark?P.mintD:P.mint;
@@ -154,16 +170,46 @@ export default function MayaAndSam(){
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&family=Satisfy&display=swap" rel="stylesheet"/>
 
       {/* NAV */}
-      <nav style={{position:'fixed',top:0,left:0,right:0,zIndex:50,background:sc?(dark?'rgba(18,16,26,0.95)':'rgba(250,248,255,0.95)'):'transparent',backdropFilter:'blur(12px)',borderBottom:sc?`1px solid ${bdr}`:'none',transition:'all 0.4s',padding:'0 40px',height:68,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-        <span style={{fontFamily:"'Satisfy',cursive",fontSize:'1.4rem',color:p}}>Maya & Sam</span>
-        <div style={{display:'flex',gap:24}}>
-          {['About','Story','Timeline','Locations','Gallery','Party','Wishes','RSVP'].map(l=>(
-            <a key={l} href={`#${l.toLowerCase()}`} style={{fontSize:'0.8rem',fontWeight:500,color:mut,textDecoration:'none'}}>{l}</a>
-          ))}
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, background: sc ? (dark ? 'rgba(18,16,26,0.95)' : 'rgba(250,248,255,0.95)') : 'transparent', backdropFilter: 'blur(12px)', borderBottom: sc ? `1px solid ${bdr}` : 'none', transition: 'all 0.4s', padding: isMobile ? '0 20px' : '0 40px', height: isMobile ? 60 : 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: isMobile ? 20 : 28, height: isMobile ? 20 : 28, borderRadius: '50%', border: `2px solid ${p}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: isMobile ? '0.6rem' : '0.8rem', fontWeight: 700, color: p }}>M&S</span>
+          </div>
         </div>
-        <button onClick={()=>setD(!dark)} style={{background:dark?'rgba(196,170,255,0.15)':'rgba(123,94,167,0.08)',border:'none',borderRadius:20,padding:'8px 12px',color:p,cursor:'pointer',display:'flex',alignItems:'center',gap:6,fontSize:'0.8rem'}}>
-          {dark?<Sun size={14}/>:<Moon size={14}/>}
-        </button>
+
+        {!isMobile ? (
+          <div style={{ display: 'flex', gap: 28 }}>
+            {['Inspiration', 'Journey', 'Timeline', 'Coordinates', 'Gallery', 'Ensemble', 'Messages', 'Confirm'].map(l => (
+              <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: mut, textDecoration: 'none' }}>{l}</a>
+            ))}
+          </div>
+        ) : (
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', color: p, cursor: 'pointer', padding: 8 }}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={() => setD(!dark)} style={{ background: 'none', border: 'none', color: p, cursor: 'pointer' }}>
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+        </div>
+
+        {/* Mobile Dropdown */}
+        <AnimatePresence>
+          {isMobile && menuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              style={{ position: 'absolute', top: 60, left: 0, right: 0, background: dark ? '#12101A' : '#FAF8FF', borderBottom: `1px solid ${bdr}`, padding: '20px', display: 'flex', flexDirection: 'column', gap: 16, zIndex: 999 }}
+            >
+              {['Inspiration', 'Journey', 'Timeline', 'Coordinates', 'Gallery', 'Ensemble', 'Messages', 'Confirm'].map(l => (
+                <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: txt, textDecoration: 'none', textAlign: 'center' }}>{l}</a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* HERO */}
@@ -196,12 +242,12 @@ export default function MayaAndSam(){
       <section style={{padding:'70px 24px',textAlign:'center',position:'relative',overflow:'hidden'}}>
         <Blob style={{width:500,height:200,background:dark?'rgba(240,168,192,0.05)':'rgba(240,168,192,0.09)',top:'50%',left:'50%',transform:'translate(-50%,-50%)',borderRadius:'40%'}}/>
         <p style={{fontFamily:"'DM Serif Display',serif",fontStyle:'italic',color:mut,marginBottom:28,fontSize:'1.05rem',position:'relative'}}>Our celebration begins in…</p>
-        <div style={{display:'flex',justifyContent:'center',gap:14,flexWrap:'wrap',position:'relative'}}>
-          {[['Days',cd.d,[p,acc]],['Hours',cd.h,[acc,mint]],['Mins',cd.m,[mint,p]],['Secs',cd.s,[p,acc]]].map(([l,v,grad])=>(
-            <motion.div key={l} whileHover={{scale:1.06}} style={{background:card,border:`1.5px solid ${bdr}`,borderRadius:20,padding:'20px 18px',minWidth:88,textAlign:'center',boxShadow:`0 8px 30px ${grad[0]}18`,position:'relative',overflow:'hidden'}}>
-              <div style={{position:'absolute',top:0,left:0,right:0,height:3,background:`linear-gradient(to right,${grad[0]},${grad[1]})`,borderRadius:'20px 20px 0 0'}}/>
-              <span style={{fontFamily:"'DM Serif Display',serif",fontSize:'2.4rem',color:grad[0],display:'block',lineHeight:1}}>{String(v).padStart(2,'0')}</span>
-              <span style={{fontSize:'0.65rem',textTransform:'uppercase',letterSpacing:'0.15em',color:mut,display:'block',marginTop:6}}>{l}</span>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 8 : 14, flexWrap: 'nowrap', overflow: 'hidden', position: 'relative' }}>
+          {[['Days', cd.d, [p, acc]], ['Hours', cd.h, [acc, mint]], ['Mins', cd.m, [mint, p]], ['Secs', cd.s, [p, acc]]].map(([l, v, grad]) => (
+            <motion.div key={l} whileHover={{ scale: 1.06 }} style={{ background: card, border: `1.5px solid ${bdr}`, borderRadius: isMobile ? 12 : 20, padding: isMobile ? '12px 4px' : '20px 18px', minWidth: isMobile ? 70 : 88, textAlign: 'center', boxShadow: `0 8px 30px ${grad[0]}18`, position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(to right,${grad[0]},${grad[1]})`, borderRadius: '20px 20px 0 0' }} />
+              <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: isMobile ? '1.5rem' : '2.4rem', color: grad[0], display: 'block', lineHeight: 1 }}>{String(v).padStart(2, '0')}</span>
+              <span style={{ fontSize: isMobile ? '0.55rem' : '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: mut, display: 'block', marginTop: 6, whiteSpace: 'nowrap' }}>{l}</span>
             </motion.div>
           ))}
         </div>

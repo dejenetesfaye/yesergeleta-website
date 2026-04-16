@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp } from 'lucide-react';
+import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 
 const P = {
   bg: '#FFFBEF', bgD: '#0E0A00',
@@ -187,11 +187,23 @@ function FAQ({ dark }) {
 export default function MiriamAndSolomon() {
   const [dark, setD] = useState(false);
   const [sc, setSc] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const cd = useCD('2026-12-20T17:00:00');
+
   useEffect(() => {
-    const fn = () => setSc(window.scrollY > 60);
-    window.addEventListener('scroll', fn);
-    return () => window.removeEventListener('scroll', fn);
+    const handleScroll = () => setSc(window.scrollY > 60);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    
+    handleScroll();
+    handleResize();
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const bg = dark ? P.bgD : P.bg;
@@ -206,19 +218,45 @@ export default function MiriamAndSolomon() {
       <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif+Ethiopic:wght@400;600;700&display=swap" rel="stylesheet" />
 
       {/* NAV */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: sc ? (dark ? 'rgba(14,10,0,0.97)' : 'rgba(255,251,239,0.97)') : 'transparent', backdropFilter: 'blur(12px)', borderBottom: sc ? `2px solid ${p}` : 'none', transition: 'all 0.4s', padding: '0 40px', height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontSize: '1rem', color: p, lineHeight: 1.2 }}>Miriam & Solomon</p>
-          <p style={{ fontFamily: "'Noto Serif Ethiopic', serif", fontSize: '0.7rem', color: mut }}>ሚሪያም & ሰለሞን</p>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, background: sc ? (dark ? 'rgba(14,10,0,0.97)' : 'rgba(255,251,239,0.97)') : 'transparent', backdropFilter: 'blur(12px)', borderBottom: sc ? `2px solid ${p}` : 'none', transition: 'all 0.4s', padding: isMobile ? '0 20px' : '0 40px', height: isMobile ? 64 : 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ textAlign: 'left' }}>
+          <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontSize: isMobile ? '0.85rem' : '1rem', color: p, lineHeight: 1.2 }}>Miriam & Solomon</p>
+          {!isMobile && <p style={{ fontFamily: "'Noto Serif Ethiopic', serif", fontSize: '0.7rem', color: mut }}>ሚሪያም & ሰለሞን</p>}
         </div>
-        <div style={{ display: 'flex', gap: 28 }}>
-          {['About', 'Story', 'Timeline', 'Locations', 'Gallery', 'Party', 'Wishes', 'RSVP'].map(l => (
-            <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.75rem', fontFamily: "'Crimson Text', serif", letterSpacing: '0.1em', color: mut, textDecoration: 'none', textTransform: 'uppercase' }}>{l}</a>
-          ))}
+
+        {!isMobile ? (
+          <div style={{ display: 'flex', gap: 28 }}>
+            {['About', 'Story', 'Timeline', 'Locations', 'Gallery', 'Party', 'Wishes', 'RSVP'].map(l => (
+              <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.75rem', fontFamily: "'Crimson Text', serif", letterSpacing: '0.1em', color: mut, textDecoration: 'none', textTransform: 'uppercase' }}>{l}</a>
+            ))}
+          </div>
+        ) : (
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', color: p, cursor: 'pointer', padding: 8 }}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={() => setD(!dark)} style={{ background: 'none', border: `1px solid ${p}`, borderRadius: 4, width: 38, height: 38, color: p, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {dark ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
         </div>
-        <button onClick={() => setD(!dark)} style={{ background: 'none', border: `1px solid ${p}`, borderRadius: 4, width: 38, height: 38, color: p, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {dark ? <Sun size={16} /> : <Moon size={16} />}
-        </button>
+
+        {/* Mobile Dropdown */}
+        <AnimatePresence>
+          {isMobile && menuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              style={{ position: 'absolute', top: 64, left: 0, right: 0, background: dark ? '#0E0A00' : '#FFFBEF', borderBottom: `2px solid ${p}`, padding: '20px', display: 'flex', flexDirection: 'column', gap: 16, zIndex: 999 }}
+            >
+              {['About', 'Story', 'Timeline', 'Locations', 'Gallery', 'Party', 'Wishes', 'RSVP'].map(l => (
+                <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} style={{ fontSize: '0.9rem', fontFamily: "'Crimson Text', serif", letterSpacing: '0.1em', color: txt, textDecoration: 'none', textTransform: 'uppercase', textAlign: 'center' }}>{l}</a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* HERO */}
@@ -246,16 +284,16 @@ export default function MiriamAndSolomon() {
       <section style={{ padding: '80px 24px', background: dark ? '#16100A' : '#FFF8E0', textAlign: 'center', position: 'relative' }}>
         <p style={{ fontFamily: "'Crimson Text', serif", fontStyle: 'italic', fontSize: '1.1rem', color: p, marginBottom: 4 }}>Until We Celebrate</p>
         <p style={{ fontFamily: "'Noto Serif Ethiopic', serif", color: mut, fontSize: '0.85rem', marginBottom: 32 }}>ድሎታችን ድረስ</p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 24, flexWrap: 'wrap' }}>
-          {[['Days', cd.d], ['Hours', cd.h], ['Minutes', cd.m], ['Seconds', cd.s]].map(([l, v]) => (
-            <div key={l} style={{ textAlign: 'center' }}>
-              <div style={{ width: 96, height: 96, background: card, border: `2px solid ${p}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', boxShadow: `0 0 20px ${dark ? 'rgba(255,200,0,0.15)' : 'rgba(184,148,10,0.15)'}`, position: 'relative' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 12 : 24, flexWrap: 'nowrap', overflow: 'hidden' }}>
+          {[['Days', cd.d], ['Hours', cd.h], ['Min', cd.m], ['Sec', cd.s]].map(([l, v]) => (
+            <div key={l} style={{ textAlign: 'center', minWidth: 0 }}>
+              <div style={{ width: isMobile ? 70 : 96, height: isMobile ? 70 : 96, background: card, border: `2px solid ${p}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', boxShadow: `0 0 20px ${dark ? 'rgba(255,200,0,0.15)' : 'rgba(184,148,10,0.15)'}`, position: 'relative' }}>
                 {[['-6px', '-6px'], ['-6px', 'auto'], ['auto', '-6px'], ['auto', 'auto']].map(([top, right], ci) => (
-                  <div key={ci} style={{ position: 'absolute', top, right, bottom: top === 'auto' ? '-6px' : 'auto', left: right === 'auto' ? '-6px' : 'auto', width: 10, height: 10, background: P.amber, transform: 'rotate(45deg)' }} />
+                  <div key={ci} style={{ position: 'absolute', top, right, bottom: top === 'auto' ? '-6px' : 'auto', left: right === 'auto' ? '-6px' : 'auto', width: isMobile ? 6 : 10, height: isMobile ? 6 : 10, background: P.amber, transform: 'rotate(45deg)' }} />
                 ))}
-                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.2rem', fontWeight: 700, color: p }}>{String(v).padStart(2, '0')}</span>
+                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.5rem' : '2.2rem', fontWeight: 700, color: p }}>{String(v).padStart(2, '0')}</span>
               </div>
-              <span style={{ fontFamily: "'Crimson Text', serif", fontSize: '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: mut }}>{l}</span>
+              <span style={{ fontFamily: "'Crimson Text', serif", fontSize: isMobile ? '0.6rem' : '0.85rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: mut, whiteSpace: 'nowrap' }}>{l}</span>
             </div>
           ))}
         </div>

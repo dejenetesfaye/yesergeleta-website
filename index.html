@@ -17,6 +17,7 @@
 </head>
 
 <body>
+  <div id="cursor-root"></div>
   <div id="landing-page">
     <nav id="navbar">
       <div class="container">
@@ -235,16 +236,16 @@
       </section>
 
       <!-- Preview Modal -->
-      <div id="preview-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); flex-direction:column; align-items:center; justify-content:center;">
-        <div style="width:95vw; max-width:1400px; height:90vh; background:#111; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,0.8);">
-          <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:#1a1a1a; border-bottom:1px solid rgba(255,255,255,0.08);">
-            <span id="modal-title" style="color:#D4AF37; font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:600; letter-spacing:0.05em;">Invitation Preview</span>
-            <div style="display:flex; gap:12px; align-items:center;">
-              <a id="modal-open-link" href="#" target="_blank" style="padding:6px 14px; border:1px solid #D4AF37; border-radius:6px; color:#D4AF37; font-size:0.78rem; font-family:'Montserrat',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; text-decoration:none;">Open Full Page</a>
-              <button id="modal-close" style="width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); border:none; color:white; cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center;">✕</button>
+      <div id="preview-modal" class="modal-overlay">
+        <div class="modal-content">
+          <div class="modal-header">
+            <span id="modal-title" class="modal-title">Invitation Preview</span>
+            <div class="modal-actions">
+              <a id="modal-open-link" href="#" target="_blank" class="modal-btn-primary">Open Full Page</a>
+              <button id="modal-close" class="modal-btn-close">✕</button>
             </div>
           </div>
-          <iframe id="preview-iframe" src="" style="flex:1; border:none; width:100%;" title="Template Preview"></iframe>
+          <iframe id="preview-iframe" src="" class="modal-iframe" title="Template Preview"></iframe>
         </div>
       </div>
 
@@ -595,7 +596,7 @@
                   <polygon points="22 2 15 22 11 13 2 9 22 2" />
                 </svg>
               </a>
-              <a href="https://instagram.com/yesergeleta" target="_blank" title="Instagram">
+              <a href="https://www.instagram.com/yesergeleta/" target="_blank" title="Instagram">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />

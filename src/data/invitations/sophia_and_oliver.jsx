@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Sparkles, Cloud } from 'lucide-react';
+import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Sparkles, Cloud, Menu, X } from 'lucide-react';
 
 const P = {
   bg: 'linear-gradient(135deg, #E0F2FE 0%, #F0FDFA 50%, #FAF5FF 100%)',
@@ -188,11 +188,23 @@ function FAQ({ dark }) {
 export default function SophiaAndOliver() {
   const [dark, setD] = useState(false);
   const [sc, setSc] = useState(false);
-  const cd = useCD('2026-08-15T16:30:00');
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const cd = useCD('2026-08-15T16:00:00');
+
   useEffect(() => {
-    const fn = () => setSc(window.scrollY > 60);
-    window.addEventListener('scroll', fn);
-    return () => window.removeEventListener('scroll', fn);
+    const handleScroll = () => setSc(window.scrollY > 60);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    
+    handleScroll();
+    handleResize();
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const bg = dark ? P.bgD : P.bg;
@@ -208,19 +220,45 @@ export default function SophiaAndOliver() {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@300;400;600;700&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
       {/* NAV */}
-      <nav style={{ position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', zIndex: 50, width: '90%', maxWidth: 1000, height: 64, background: glass, backdropFilter: 'blur(20px)', border: `1px solid ${bdr}`, borderRadius: 24, padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', transition: 'all 0.3s' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Sparkles size={24} color={p} />
-          <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: '1.2rem', fontWeight: 700, color: txt }}>S & O</span>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, background: sc ? (dark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.8)') : 'transparent', backdropFilter: 'blur(12px)', borderBottom: sc ? `1px solid ${P.bdrD}` : 'none', transition: 'all 0.4s', padding: isMobile ? '0 20px' : '0 40px', height: isMobile ? 64 : 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Sparkles size={isMobile ? 24 : 28} color={P.pri} />
+          <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: isMobile ? '1.1rem' : '1.3rem', fontWeight: 700, background: `linear-gradient(to right, ${P.pri}, ${P.acc})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>S & O</span>
         </div>
-        <div style={{ display: 'flex', gap: 24 }}>
-          {['About', 'Story', 'Events', 'Party', 'Gallery', 'RSVP'].map(l => (
-            <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.8rem', fontWeight: 600, color: mut, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{l}</a>
-          ))}
+
+        {!isMobile ? (
+          <div style={{ display: 'flex', gap: 28 }}>
+            {['Story', 'Timeline', 'Locations', 'Gallery', 'Party', 'Wishes', 'RSVP'].map(l => (
+              <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: mut, textDecoration: 'none' }}>{l}</a>
+            ))}
+          </div>
+        ) : (
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', color: P.pri, cursor: 'pointer', padding: 8 }}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={() => setD(!dark)} style={{ background: glass, border: `1px solid ${bdr}`, borderRadius: '50%', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: P.pri, cursor: 'pointer' }}>
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
         </div>
-        <button onClick={() => setD(!dark)} style={{ borderRadius: 12, width: 40, height: 40, background: 'transparent', border: `1px solid ${bdr}`, color: p, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {dark ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
+
+        {/* Mobile Dropdown */}
+        <AnimatePresence>
+          {isMobile && menuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              style={{ position: 'absolute', top: 64, left: 0, right: 0, background: dark ? '#0F172A' : '#FFFFFF', borderBottom: `1px solid ${bdr}`, padding: '20px', display: 'flex', flexDirection: 'column', gap: 16, zIndex: 999 }}
+            >
+              {['Story', 'Timeline', 'Locations', 'Gallery', 'Party', 'Wishes', 'RSVP'].map(l => (
+                <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} style={{ fontSize: '0.9rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: txt, textDecoration: 'none', textAlign: 'center' }}>{l}</a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* HERO */}
@@ -241,11 +279,11 @@ export default function SophiaAndOliver() {
 
       {/* COUNTDOWN */}
       <section style={{ padding: '80px 24px', textAlign: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 8 : 16, flexWrap: 'nowrap', overflow: 'hidden' }}>
           {[['DAYS', cd.d], ['HRS', cd.h], ['MINS', cd.m], ['SECS', cd.s]].map(([l, v]) => (
-            <div key={l} style={{ width: 110, height: 110, background: glass, backdropFilter: 'blur(12px)', border: `1px solid ${bdr}`, borderRadius: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 700, color: p, fontFamily: "'Outfit', sans-serif" }}>{String(v).padStart(2, '0')}</span>
-              <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', color: mut }}>{l}</span>
+            <div key={l} style={{ width: isMobile ? 75 : 110, height: isMobile ? 75 : 110, background: glass, backdropFilter: 'blur(12px)', border: `1px solid ${bdr}`, borderRadius: isMobile ? 16 : 24, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: 0 }}>
+              <span style={{ fontSize: isMobile ? '1.5rem' : '2.5rem', fontWeight: 700, color: p, fontFamily: "'Outfit', sans-serif" }}>{String(v).padStart(2, '0')}</span>
+              <span style={{ fontSize: isMobile ? '0.6rem' : '0.7rem', fontWeight: 700, letterSpacing: '0.1em', color: mut, whiteSpace: 'nowrap' }}>{l}</span>
             </div>
           ))}
         </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sun, Moon, MapPin, Volume2, VolumeX, Play, Pause, Send, ChevronDown, ChevronUp } from 'lucide-react';
+import { Heart, Sun, Moon, MapPin, Volume2, VolumeX, Play, Pause, Send, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 
 const P = {
   bg:'#080808', bgL:'#F0ECE8', card:'#141414', cardL:'#FFFFFF',
@@ -129,28 +129,71 @@ function FAQ({dark}){
 }
 
 export default function NoahAndEve(){
-  const[dark,setD]=useState(true);const[sc,setSc]=useState(false);
-  const cd=useCD('2026-09-10T19:00:00');
-  useEffect(()=>{const fn=()=>setSc(window.scrollY>60);window.addEventListener('scroll',fn);return()=>window.removeEventListener('scroll',fn);},[]);
+  const[dark,setD]=useState(true);  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [sc, setSc] = useState(false);
+  const cd = useCD('2026-12-05T16:00:00');
+
+  useEffect(() => {
+    const handleScroll = () => setSc(window.scrollY > 60);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    
+    handleScroll();
+    handleResize();
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const bg=dark?P.bg:P.bgL;const card=dark?P.card:P.cardL;const pri=dark?P.pri:P.priL;
   const crim=dark?P.crim:P.crimL;const txt=dark?P.txt:P.txtL;const mut=dark?P.mut:P.mutL;const bdr=dark?P.bdr:P.bdrL;
+  const p = pri;
 
   return(
     <div style={{background:bg,color:txt,minHeight:'100vh',fontFamily:"'EB Garamond',Georgia,serif",transition:'all 0.4s'}}>
       <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet"/>
 
       {/* NAV */}
-      <nav style={{position:'fixed',top:0,left:0,right:0,zIndex:50,background:sc?`${bg}F2`:'transparent',backdropFilter:'blur(12px)',borderBottom:sc?`1px solid ${bdr}`:'none',transition:'all 0.4s',padding:'0 40px',height:70,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-        <span style={{fontFamily:"'Cinzel Decorative',serif",fontSize:'1.1rem',color:pri,letterSpacing:'0.1em'}}>N & E</span>
-        <div style={{display:'flex',gap:28}}>
-          {['Story','Timeline','Locations','Gallery','Party','Wishes','RSVP'].map(l=>(
-            <a key={l} href={`#${l.toLowerCase()}`} style={{fontFamily:"'Cinzel',serif",fontSize:'0.65rem',textTransform:'uppercase',letterSpacing:'0.2em',color:mut,textDecoration:'none'}}>{l}</a>
-          ))}
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, background: sc ? (dark ? 'rgba(8,8,8,0.98)' : 'rgba(240,236,232,0.98)') : 'transparent', borderBottom: sc ? `1px solid ${bdr}` : 'none', transition: 'all 0.4s', padding: isMobile ? '0 20px' : '0 40px', height: isMobile ? 64 : 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 600, color: p, letterSpacing: '0.1em' }}>NOAH & EVE</span>
+        
+        {!isMobile ? (
+          <div style={{ display: 'flex', gap: 32 }}>
+            {['Inspiration', 'Legend', 'Timeline', 'Coordinates', 'Gallery', 'Ensemble', 'Messages', 'Confirm'].map(l => (
+              <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: mut, textDecoration: 'none' }}>{l}</a>
+            ))}
+          </div>
+        ) : (
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', color: p, cursor: 'pointer', padding: 8 }}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={() => setD(!dark)} style={{ background: 'none', border: `1px solid ${bdr}`, borderRadius: 4, padding: '6px 10px', color: p, cursor: 'pointer' }}>
+            {dark ? <Sun size={14} /> : <Moon size={14} />}
+          </button>
         </div>
-        <button onClick={()=>setD(!dark)} style={{background:'transparent',border:`1px solid ${pri}`,borderRadius:'50%',width:36,height:36,color:pri,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>
-          {dark?<Sun size={15}/>:<Moon size={15}/>}
-        </button>
+
+        {/* Mobile Dropdown */}
+        <AnimatePresence>
+          {isMobile && menuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              style={{ position: 'absolute', top: 64, left: 0, right: 0, background: dark ? '#080808' : '#F0ECE8', borderBottom: `1px solid ${bdr}`, padding: '20px', display: 'flex', flexDirection: 'column', gap: 16, zIndex: 999 }}
+            >
+              {['Inspiration', 'Legend', 'Timeline', 'Coordinates', 'Gallery', 'Ensemble', 'Messages', 'Confirm'].map(l => (
+                <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} style={{ fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: txt, textDecoration: 'none', textAlign: 'center' }}>{l}</a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* HERO */}
@@ -175,14 +218,14 @@ export default function NoahAndEve(){
       <section style={{padding:'80px 24px',textAlign:'center',background:dark?'#0D0D0D':P.bgL}}>
         <p style={{fontFamily:"'Cinzel',serif",fontSize:'0.6rem',letterSpacing:'0.4em',color:crim,textTransform:'uppercase',marginBottom:12}}>Time Remaining</p>
         <h2 style={{fontFamily:"'Cinzel Decorative',serif",fontSize:'2rem',color:dark?'white':txt,marginBottom:36}}>Until Our Night</h2>
-        <div style={{display:'flex',justifyContent:'center',gap:20,flexWrap:'wrap'}}>
-          {[['Days',cd.d],['Hours',cd.h],['Mins',cd.m],['Secs',cd.s]].map(([l,v])=>(
-            <motion.div key={l} whileHover={{scale:1.05}}>
-              <div style={{background:card,border:`1px solid ${pri}`,padding:'20px 8px',minWidth:88,textAlign:'center',position:'relative',boxShadow:`0 0 20px rgba(212,175,55,0.15)`}}>
-                <div style={{position:'absolute',top:0,left:0,right:0,height:2,background:`linear-gradient(to right,${crim},${pri})`}}/>
-                <span style={{fontFamily:"'Cinzel',serif",fontSize:'2.2rem',fontWeight:700,color:pri,display:'block'}}>{String(v).padStart(2,'0')}</span>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 8 : 20, flexWrap: 'nowrap', overflow: 'hidden' }}>
+          {[['Days', cd.d], ['Hours', cd.h], ['Mins', cd.m], ['Secs', cd.s]].map(([l, v]) => (
+            <motion.div key={l} whileHover={{ scale: 1.05 }} style={{ minWidth: 0 }}>
+              <div style={{ background: card, border: `1px solid ${pri}`, padding: isMobile ? '12px 4px' : '20px 8px', minWidth: isMobile ? 70 : 88, textAlign: 'center', position: 'relative', boxShadow: `0 0 20px rgba(212,175,55,0.15)` }}>
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(to right,${crim},${pri})` }} />
+                <span style={{ fontFamily: "'Cinzel', serif", fontSize: isMobile ? '1.5rem' : '2.2rem', fontWeight: 700, color: pri, display: 'block' }}>{String(v).padStart(2, '0')}</span>
               </div>
-              <p style={{fontFamily:"'Cinzel',serif",fontSize:'0.55rem',letterSpacing:'0.2em',textTransform:'uppercase',color:mut,textAlign:'center',marginTop:8}}>{l}</p>
+              <p style={{ fontFamily: "'Cinzel', serif", fontSize: isMobile ? '0.5rem' : '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: mut, textAlign: 'center', marginTop: 8, whiteSpace: 'nowrap' }}>{l}</p>
             </motion.div>
           ))}
         </div>

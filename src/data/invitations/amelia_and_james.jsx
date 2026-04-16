@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Camera, Bookmark } from 'lucide-react';
+import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Camera, Bookmark, MoreHorizontal, X } from 'lucide-react';
 
 const P = {
   bg: '#FFFFFF', bgD: '#0F0F0F',
@@ -188,11 +188,23 @@ function FAQ({ dark }) {
 export default function AmeliaAndJames() {
   const [dark, setD] = useState(false);
   const [sc, setSc] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const cd = useCD('2026-09-12T16:00:00');
+
   useEffect(() => {
-    const fn = () => setSc(window.scrollY > 60);
-    window.addEventListener('scroll', fn);
-    return () => window.removeEventListener('scroll', fn);
+    const handleScroll = () => setSc(window.scrollY > 60);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    
+    handleScroll();
+    handleResize();
+    
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const bg = dark ? P.bgD : P.bg;
@@ -207,64 +219,90 @@ export default function AmeliaAndJames() {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
 
       {/* NAV */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: sc ? (dark ? 'rgba(15,15,15,0.98)' : 'rgba(255,255,255,0.98)') : 'transparent', borderBottom: sc ? `1px solid ${bdr}` : 'none', transition: 'all 0.4s', padding: '0 40px', height: 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.1em' }}>AM&JA</span>
-        <div style={{ display: 'flex', gap: 32 }}>
-          {['Profile', 'Story', 'Events', 'Gallery', 'Party', 'Journal', 'RSVP'].map(l => (
-            <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: mut, textDecoration: 'none' }}>{l}</a>
-          ))}
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, background: sc ? (dark ? 'rgba(15,15,15,0.98)' : 'rgba(255,255,255,0.98)') : 'transparent', borderBottom: sc ? `1px solid ${bdr}` : 'none', transition: 'all 0.4s', padding: isMobile ? '0 20px' : '0 40px', height: isMobile ? 70 : 80, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 700, letterSpacing: '0.1em' }}>AM&JA</span>
+        
+        {!isMobile ? (
+          <div style={{ display: 'flex', gap: 32 }}>
+            {['Profile', 'Story', 'Events', 'Gallery', 'Party', 'Journal', 'RSVP'].map(l => (
+              <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: mut, textDecoration: 'none' }}>{l}</a>
+            ))}
+          </div>
+        ) : (
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', color: txt, cursor: 'pointer', padding: 10 }}>
+            {menuOpen ? <X size={24} /> : <MoreHorizontal size={28} />}
+          </button>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <button onClick={() => setD(!dark)} style={{ background: 'none', border: 'none', color: txt, cursor: 'pointer' }}>
+            {dark ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
         </div>
-        <button onClick={() => setD(!dark)} style={{ background: 'none', border: 'none', color: txt, cursor: 'pointer' }}>
-          {dark ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
+
+        {/* Mobile Dropdown */}
+        <AnimatePresence>
+          {isMobile && menuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              style={{ position: 'absolute', top: 70, left: 0, right: 0, background: dark ? '#111' : 'white', borderBottom: `1px solid ${bdr}`, padding: '20px', display: 'flex', flexDirection: 'column', gap: 20, zIndex: 999 }}
+            >
+              {['Profile', 'Story', 'Events', 'Gallery', 'Party', 'Journal', 'RSVP'].map(l => (
+                <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} style={{ fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: txt, textDecoration: 'none', textAlign: 'center' }}>{l}</a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* HERO */}
-      <section style={{ position: 'relative', height: '100vh', display: 'grid', gridTemplateColumns: '1fr 1fr', overflow: 'hidden' }}>
-        <div style={{ background: '#EAEAEA', overflow: 'hidden', position: 'relative' }}>
+      <section style={{ position: 'relative', height: isMobile ? 'auto' : '100vh', minHeight: isMobile ? 600 : 'auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', overflow: 'hidden' }}>
+        <div style={{ background: '#EAEAEA', height: isMobile ? '50vh' : '100%', overflow: 'hidden', position: 'relative' }}>
           <img src="/images/temp1.webp" alt="Amelia" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', bottom: 40, left: 40, color: 'white' }}>
-            <p style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase' }}>The Bride</p>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '4rem', fontWeight: 400 }}>Amelia</h2>
+          <div style={{ position: 'absolute', bottom: isMobile ? 20 : 40, left: isMobile ? 20 : 40, color: 'white' }}>
+            <p style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.8 }}>The Bride</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2.5rem' : '4rem', fontWeight: 400 }}>Amelia</h2>
           </div>
         </div>
-        <div style={{ background: '#D9D9D9', overflow: 'hidden', position: 'relative' }}>
+        <div style={{ background: '#D9D9D9', height: isMobile ? '50vh' : '100%', overflow: 'hidden', position: 'relative' }}>
           <img src="/images/temp6.jpg" alt="James" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', top: 40, right: 40, color: 'white', textAlign: 'right' }}>
-            <p style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase' }}>The Groom</p>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '4rem', fontWeight: 400 }}>James</h2>
+          <div style={{ position: 'absolute', top: isMobile ? 20 : 40, right: isMobile ? 20 : 40, color: 'white', textAlign: 'right' }}>
+            <p style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', opacity: 0.8 }}>The Groom</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2.5rem' : '4rem', fontWeight: 400 }}>James</h2>
           </div>
         </div>
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 10 }}>
-          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.5 }} style={{ background: bg, padding: '40px 60px', textAlign: 'center', border: `1px solid ${bdr}`, boxShadow: '0 20px 80px rgba(0,0,0,0.1)' }}>
-            <p style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.5em', textTransform: 'uppercase', color: p, marginBottom: 20 }}>International Issue · Sept 2026</p>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '5rem', fontWeight: 700, lineHeight: 0.9, marginBottom: 20 }}>The <br /> Nuptials</h1>
-            <div style={{ height: 2, width: 60, background: p, margin: '0 auto 20px' }} />
-            <p style={{ fontSize: '1.2rem', fontWeight: 400, letterSpacing: '0.1em', color: txt }}>Amelia Vance & James Sterling</p>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 10, padding: '20px' }}>
+          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.5 }} style={{ background: bg, padding: isMobile ? '30px 20px' : '40px 60px', textAlign: 'center', border: `1px solid ${bdr}`, boxShadow: '0 20px 80px rgba(0,0,0,0.1)', width: isMobile ? '90%' : 'auto' }}>
+            <p style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.4em', textTransform: 'uppercase', color: p, marginBottom: 15 }}>International Issue · Sept 2026</p>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2.8rem' : '5rem', fontWeight: 700, lineHeight: 0.9, marginBottom: 20 }}>The <br /> Nuptials</h1>
+            <div style={{ height: 2, width: 40, background: p, margin: '0 auto 20px' }} />
+            <p style={{ fontSize: isMobile ? '1rem' : '1.2rem', fontWeight: 400, letterSpacing: '0.1em', color: txt }}>Amelia Vance & James Sterling</p>
           </motion.div>
         </div>
       </section>
 
       {/* COUNTDOWN */}
-      <section style={{ padding: '60px 40px', borderBottom: `1px solid ${bdr}`, textAlign: 'center' }}>
+      <section style={{ padding: '60px 20px', borderBottom: `1px solid ${bdr}`, textAlign: 'center' }}>
         <p style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: mut, marginBottom: 30 }}>Countdown to Launch</p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 60 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 20 : 60 }}>
           {[['Days', cd.d], ['Hrs', cd.h], ['Min', cd.m], ['Sec', cd.s]].map(([l, v]) => (
             <div key={l} style={{ textAlign: 'center' }}>
-              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '4rem', fontWeight: 400, display: 'block', color: txt }}>{String(v).padStart(2, '0')}</span>
-              <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: p }}>{l}</span>
+              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2.5rem' : '4rem', fontWeight: 400, display: 'block', color: txt }}>{String(v).padStart(2, '0')}</span>
+              <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: p }}>{l}</span>
             </div>
           ))}
         </div>
       </section>
 
       {/* ABOUT US */}
-      <section id="profile" style={{ padding: '100px 40px', maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+      <section id="profile" style={{ padding: isMobile ? '60px 24px' : '100px 40px', maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 40 : 80, alignItems: 'center' }}>
           <div>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: p, marginBottom: 12 }}>Feature Story</p>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '3.5rem', fontWeight: 400, color: txt, marginBottom: 32, lineHeight: 1.1 }}>The Architects of <br /> A Modern Romance</h2>
-            <div style={{ columns: 2, columnGap: 40, fontSize: '1rem', lineHeight: 1.8, color: mut }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2.2rem' : '3.5rem', fontWeight: 400, color: txt, marginBottom: 32, lineHeight: 1.1 }}>The Architects of <br /> A Modern Romance</h2>
+            <div style={{ columns: isMobile ? 1 : 2, columnGap: 40, fontSize: '1rem', lineHeight: 1.8, color: mut }}>
               <p style={{ marginBottom: 20 }}><span style={{ fontFamily: "'Playfair Display', serif", fontSize: '3rem', float: 'left', lineHeight: 0.8, marginRight: 8, marginTop: 4, color: p }}>A</span>melia Vance, a curator of fine arts, has spent a decade defining aesthetic excellence. Her eye for detail and uncompromising vision transformed the way we see the world. Then she met James.</p>
               <p>James Sterling, a pioneer in sustainable architecture, builds structures that stand the test of time. Their meeting wasn't just a coincidence; it was a collision of form and function. This September, they merge their lives in a ceremony that promises to be as timeless as their love.</p>
             </div>
@@ -273,9 +311,9 @@ export default function AmeliaAndJames() {
             <div style={{ aspectHeight: '1.2/1', background: '#EEE', overflow: 'hidden' }}>
               <img src="/images/couple_1.jpg" alt="Couple" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
-            <div style={{ position: 'absolute', bottom: -30, right: -30, background: p, padding: '30px', color: 'white', maxWidth: 240 }}>
-              <p style={{ fontSize: '1rem', fontFamily: "'Playfair Display', serif", fontStyle: 'italic', marginBottom: 12 }}>"We wanted a day that felt like a quiet conversation in a loud room."</p>
-              <p style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>— Amelia Vance</p>
+            <div style={{ position: 'absolute', bottom: isMobile ? -15 : -30, right: isMobile ? -15 : -30, background: p, padding: isMobile ? '20px' : '30px', color: 'white', maxWidth: 200 }}>
+              <p style={{ fontSize: '0.9rem', fontFamily: "'Playfair Display', serif", fontStyle: 'italic', marginBottom: 12 }}>"We wanted a day that felt like a quiet conversation in a loud room."</p>
+              <p style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>— Amelia Vance</p>
             </div>
           </div>
         </div>
@@ -303,13 +341,13 @@ export default function AmeliaAndJames() {
       </section>
 
       {/* TIMELINE */}
-      <section id="events" style={{ padding: '100px 40px', maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(200px, 0.4fr) 1fr', gap: 60 }}>
+      <section id="events" style={{ padding: isMobile ? '60px 24px' : '100px 40px', maxWidth: 1200, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'minmax(200px, 0.4fr) 1fr', gap: isMobile ? 30 : 60 }}>
           <div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '3.5rem', fontWeight: 400, color: txt, marginBottom: 20 }}>The Order of Events</h2>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2.5rem' : '3.5rem', fontWeight: 400, color: txt, marginBottom: 20 }}>The Order of Events</h2>
             <div style={{ height: 4, width: 80, background: p }} />
           </div>
-          <div style={{ display: 'grid', gap: 40 }}>
+          <div style={{ display: 'grid', gap: isMobile ? 30 : 40 }}>
             {[
               { t: '16:00', e: 'Photographic Reception', d: 'Arrival of guests and cocktail hour in the Sculpture Garden.' },
               { t: '17:30', e: 'The Union', d: 'Vows at the Museum Chapel. Minimalist ceremony with string accompaniment.' },
@@ -317,11 +355,11 @@ export default function AmeliaAndJames() {
               { t: '20:30', e: 'Dinner au Musée', d: 'A multi-course culinary event in the Grand Hall.' },
               { t: '22:30', e: 'Midnight Salon', d: 'Evening music and conversation under the moonlit dome.' },
             ].map((ev, i) => (
-              <div key={i} style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 30, paddingBottom: 30, borderBottom: `1px solid ${bdr}` }}>
-                <span style={{ fontSize: '1.2rem', fontWeight: 700, color: p }}>{ev.t}</span>
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '100px 1fr', gap: isMobile ? 10 : 30, paddingBottom: 30, borderBottom: `1px solid ${bdr}` }}>
+                <span style={{ fontSize: isMobile ? '1rem' : '1.2rem', fontWeight: 700, color: p }}>{ev.t}</span>
                 <div>
-                  <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', color: txt, marginBottom: 8 }}>{ev.e}</h4>
-                  <p style={{ color: mut, fontSize: '1rem' }}>{ev.d}</p>
+                  <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.3rem' : '1.5rem', color: txt, marginBottom: 8 }}>{ev.e}</h4>
+                  <p style={{ color: mut, fontSize: '0.95rem' }}>{ev.d}</p>
                 </div>
               </div>
             ))}
@@ -330,20 +368,20 @@ export default function AmeliaAndJames() {
       </section>
 
       {/* LOCATIONS */}
-      <section id="galaxies" style={{ padding: '100px 40px', background: dark ? '#111' : '#FAFAFA' }}>
+      <section id="galaxies" style={{ padding: isMobile ? '60px 24px' : '100px 40px', background: dark ? '#111' : '#FAFAFA' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: p, marginBottom: 40, textAlign: 'center' }}>The Atlas</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 40 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(300px, 1fr))', gap: isMobile ? 30 : 40 }}>
             {[
               { n: 'MCA Grand Chapel', t: 'The Ceremony', a: '14 Contemporary Way, Art District', maps: 'https://maps.google.com' },
               { n: 'The Atrium', t: 'The Reception', a: 'MCA Main Floor, Art District', maps: 'https://maps.google.com' },
               { n: 'MCA Mirror Room', t: 'The Afterparty', a: 'MCA Lower Level, Art District', maps: 'https://maps.google.com' },
             ].map((loc, i) => (
-              <div key={i} style={{ padding: '40px', border: `1px solid ${bdr}`, background: bg }}>
+              <div key={i} style={{ padding: isMobile ? '30px 20px' : '40px', border: `1px solid ${bdr}`, background: bg }}>
                 <p style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: mut, marginBottom: 12 }}>{loc.t}</p>
-                <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.8rem', color: txt, marginBottom: 16 }}>{loc.n}</h4>
-                <p style={{ fontSize: '0.95rem', color: mut, marginBottom: 24 }}>{loc.a}</p>
-                <a href={loc.maps} target="_blank" rel="noopener noreferrer" style={{ display: 'block', padding: '14px', textAlign: 'center', border: `1px solid ${txt}`, color: txt, textDecoration: 'none', fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>View on Map</a>
+                <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.5rem' : '1.8rem', color: txt, marginBottom: 16 }}>{loc.n}</h4>
+                <p style={{ fontSize: '0.9rem', color: mut, marginBottom: 24 }}>{loc.a}</p>
+                <a href={loc.maps} target="_blank" rel="noopener noreferrer" style={{ display: 'block', padding: '14px', textAlign: 'center', border: `1px solid ${txt}`, color: txt, textDecoration: 'none', fontWeight: 700, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>View on Map</a>
               </div>
             ))}
           </div>
@@ -351,11 +389,11 @@ export default function AmeliaAndJames() {
       </section>
 
       {/* GALLERY */}
-      <section id="gallery" style={{ padding: '100px 40px' }}>
+      <section id="gallery" style={{ padding: isMobile ? '60px 10px' : '100px 40px' }}>
         <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: mut, marginBottom: 32, textAlign: 'center' }}>Captured Moments</p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, maxWidth: 1400, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: isMobile ? 5 : 10, maxWidth: 1400, margin: '0 auto' }}>
           {['/images/couple_1.jpg', '/images/couple_2.jpg', '/images/couple_3.jpg', '/images/couple_4.jpg', '/images/temp5.jpg', '/images/hero3.jpg', '/images/temp3.webp', '/images/hero2.jpg'].map((img, i) => (
-            <div key={i} style={{ aspectRatio: '4/5', overflow: 'hidden', gridColumn: i === 0 || i === 7 ? 'span 2' : 'span 1' }}>
+            <div key={i} style={{ aspectRatio: '4/5', overflow: 'hidden', gridColumn: (!isMobile && (i === 0 || i === 7)) ? 'span 2' : 'span 1' }}>
               <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           ))}
@@ -363,18 +401,18 @@ export default function AmeliaAndJames() {
       </section>
 
       {/* BRIDAL PARTY */}
-      <section id="party" style={{ padding: '100px 40px', background: dark ? '#111' : '#F9F9F9' }}>
+      <section id="party" style={{ padding: isMobile ? '60px 24px' : '100px 40px', background: dark ? '#111' : '#F9F9F9' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
           <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: p, marginBottom: 16 }}>The Ensemble</p>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '3rem', fontWeight: 400, color: txt, marginBottom: 60 }}>The Wedding Party</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 40 }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2.5rem' : '3rem', fontWeight: 400, color: txt, marginBottom: 60 }}>The Wedding Party</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: isMobile ? 24 : 40 }}>
             {['Victoria', 'Juliet', 'Oliver', 'Theodore'].map((n, i) => (
               <div key={i} style={{ textAlign: 'center' }}>
-                <div style={{ aspectRatio: '1', background: '#DDD', marginBottom: 20 }}>
+                <div style={{ aspectRatio: '1', background: '#DDD', marginBottom: 20, overflow: 'hidden' }}>
                   <img src="/images/head1.jpg" alt={n} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
-                <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem' }}>{n}</h4>
-                <p style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: mut, marginTop: 4 }}>{i < 2 ? 'Honorary Muse' : 'Principal Guardian'}</p>
+                <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.1rem' : '1.4rem' }}>{n}</h4>
+                <p style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: mut, marginTop: 4 }}>{i < 2 ? 'Honorary Muse' : 'Principal Guardian'}</p>
               </div>
             ))}
           </div>
@@ -403,18 +441,18 @@ export default function AmeliaAndJames() {
       </section>
 
       {/* RSVP */}
-      <section id="rsvp" style={{ padding: '120px 40px', background: p, color: 'white', textAlign: 'center' }}>
+      <section id="rsvp" style={{ padding: isMobile ? '80px 24px' : '120px 40px', background: p, color: 'white', textAlign: 'center' }}>
         <div style={{ maxWidth: 600, margin: '0 auto' }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '4rem', fontWeight: 400, marginBottom: 20 }}>Confirm Your <br /> Presence</h2>
-          <p style={{ fontSize: '1.2rem', opacity: 0.8, marginBottom: 40, fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>RSVP by August 15, 2026</p>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2.5rem' : '4rem', fontWeight: 400, marginBottom: 20 }}>Confirm Your <br /> Presence</h2>
+          <p style={{ fontSize: isMobile ? '1rem' : '1.2rem', opacity: 0.8, marginBottom: 40, fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>RSVP by August 15, 2026</p>
           <form style={{ display: 'flex', flexDirection: 'column', gap: 24 }} onSubmit={e => { e.preventDefault(); const fd = new FormData(e.target); const msg = `📖 RSVP — Amelia & James\nName: ${fd.get('name')}\nAttendance: ${fd.get('att')}\nGuests: ${fd.get('guests')}\nNote: ${fd.get('note')}`; window.open(`https://t.me/yeserge_leta1?text=${encodeURIComponent(msg)}`, '_blank'); e.target.reset(); }}>
-            <input name="name" placeholder="Full Name" required style={{ border: 'none', borderBottom: '1px solid rgba(255,255,255,0.3)', padding: '16px 0', background: 'transparent', color: 'white', outline: 'none', fontSize: '1.2rem', textAlign: 'center' }} />
-            <select name="att" required style={{ border: 'none', borderBottom: '1px solid rgba(255,255,255,0.3)', padding: '16px 0', background: 'transparent', color: 'white', outline: 'none', fontSize: '1.2rem', textAlign: 'center' }}>
+            <input name="name" placeholder="Full Name" required style={{ border: 'none', borderBottom: '1px solid rgba(255,255,255,0.3)', padding: '16px 0', background: 'transparent', color: 'white', outline: 'none', fontSize: isMobile ? '1.1rem' : '1.2rem', textAlign: 'center' }} />
+            <select name="att" required style={{ border: 'none', borderBottom: '1px solid rgba(255,255,255,0.3)', padding: '16px 0', background: 'transparent', color: 'white', outline: 'none', fontSize: isMobile ? '1.1rem' : '1.2rem', textAlign: 'center' }}>
               <option value="" style={{ color: 'black' }}>Status</option>
               <option style={{ color: 'black' }}>Confirming Attendance</option>
               <option style={{ color: 'black' }}>Regretfully Declining</option>
             </select>
-            <input name="guests" type="number" placeholder="Guest Count" style={{ border: 'none', borderBottom: '1px solid rgba(255,255,255,0.3)', padding: '16px 0', background: 'transparent', color: 'white', outline: 'none', fontSize: '1.2rem', textAlign: 'center' }} />
+            <input name="guests" type="number" placeholder="Guest Count" style={{ border: 'none', borderBottom: '1px solid rgba(255,255,255,0.3)', padding: '16px 0', background: 'transparent', color: 'white', outline: 'none', fontSize: isMobile ? '1.1rem' : '1.2rem', textAlign: 'center' }} />
             <button type="submit" style={{ marginTop: 20, padding: '20px', background: 'white', color: p, border: 'none', fontWeight: 700, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.3em', cursor: 'pointer' }}>Confirm Spot</button>
           </form>
         </div>

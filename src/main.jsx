@@ -1,11 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { translations } from './translations.js'
+import RomanticCursor from './components/RomanticCursor'
 
 // --- Routing & React Mounting Logic ---
 const path = window.location.pathname.replace(/^\/|\/$/g, '');
 const landingPage = document.getElementById('landing-page');
 const weddingInvitation = document.getElementById('wedding-invitation');
+const cursorRoot = document.getElementById('cursor-root');
+
+// Mount Cursor Component
+if (cursorRoot) {
+  ReactDOM.createRoot(cursorRoot).render(
+    <React.StrictMode>
+      <RomanticCursor />
+    </React.StrictMode>
+  );
+}
 
 // Dynamically scan for invitation files (JSX and TSX)
 const invitationModules = import.meta.glob('./data/invitations/*.{jsx,tsx}');

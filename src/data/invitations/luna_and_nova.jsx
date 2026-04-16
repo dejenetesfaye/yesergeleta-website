@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Star, Sparkles, Orbit } from 'lucide-react';
+import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Star, Sparkles, Orbit, Menu, X } from 'lucide-react';
 
 const P = {
   bg: '#050214', bgL: '#F0F0FF',
@@ -188,11 +188,22 @@ function FAQ({ dark }) {
 export default function LunaAndNova() {
   const [dark, setD] = useState(true);
   const [sc, setSc] = useState(false);
-  const cd = useCD('2026-11-28T18:00:00');
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const cd = useCD('2026-12-24T18:00:00');
   useEffect(() => {
-    const fn = () => setSc(window.scrollY > 60);
-    window.addEventListener('scroll', fn);
-    return () => window.removeEventListener('scroll', fn);
+    const handleScroll = () => setSc(window.scrollY > 60);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    
+    handleScroll();
+    handleResize();
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const bg = dark ? P.bg : P.bgL;
@@ -207,19 +218,45 @@ export default function LunaAndNova() {
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
       {/* NAV */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: sc ? (dark ? 'rgba(5,2,20,0.95)' : 'rgba(240,240,255,0.95)') : 'transparent', backdropFilter: 'blur(12px)', borderBottom: sc ? `1px solid ${bdr}` : 'none', transition: 'all 0.4s', padding: '0 40px', height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Orbit size={24} color={P.cyan} />
-          <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '1.2rem', fontWeight: 700, color: p, letterSpacing: '0.1em' }}>L & N</span>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, background: sc ? (dark ? 'rgba(5,2,20,0.95)' : 'rgba(240,240,255,0.95)') : 'transparent', backdropFilter: 'blur(12px)', borderBottom: sc ? `1px solid ${bdr}` : 'none', transition: 'all 0.4s', padding: isMobile ? '0 20px' : '0 40px', height: isMobile ? 64 : 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Orbit size={isMobile ? 24 : 32} color={P.cyan} style={{ animation: 'spin 10s linear infinite' }} />
+          <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: isMobile ? '1.1rem' : '1.4rem', fontWeight: 700, letterSpacing: '0.1em', background: `linear-gradient(to right, ${P.cyan}, ${P.pri})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>LUNA & NOVA</span>
         </div>
-        <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
-          {['About', 'Story', 'Mission', 'Galaxies', 'Crew', 'Memories', 'RSVP'].map(l => (
-            <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', color: mut, textDecoration: 'none', fontFamily: "'Space Grotesk', sans-serif" }}>{l}</a>
-          ))}
+
+        {!isMobile ? (
+          <div style={{ display: 'flex', gap: 28 }}>
+            {['Mission', 'History', 'Timeline', 'Star-base', 'Gallery', 'Units', 'Broadcast', 'Comply'].map(l => (
+              <a key={l} href={`#${l.toLowerCase()}`} style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: mut, textDecoration: 'none' }}>{l}</a>
+            ))}
+          </div>
+        ) : (
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', color: P.cyan, cursor: 'pointer', padding: 8 }}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={() => setD(!dark)} style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${bdr}`, borderRadius: '50%', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', color: P.acc, cursor: 'pointer' }}>
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
         </div>
-        <button onClick={() => setD(!dark)} style={{ background: 'none', border: `1px solid ${p}`, borderRadius: 20, padding: '8px 16px', color: p, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase' }}>
-          {dark ? <Sun size={14} /> : <Moon size={14} />} {dark ? 'Sun' : 'Moon'}
-        </button>
+
+        {/* Mobile Dropdown */}
+        <AnimatePresence>
+          {isMobile && menuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              style={{ position: 'absolute', top: 64, left: 0, right: 0, background: dark ? '#050214' : '#F0F0FF', borderBottom: `1px solid ${bdr}`, padding: '20px', display: 'flex', flexDirection: 'column', gap: 16, zIndex: 999 }}
+            >
+              {['Mission', 'History', 'Timeline', 'Star-base', 'Gallery', 'Units', 'Broadcast', 'Comply'].map(l => (
+                <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: txt, textDecoration: 'none', textAlign: 'center' }}>{l}</a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* HERO */}
@@ -247,14 +284,14 @@ export default function LunaAndNova() {
       {/* COUNTDOWN */}
       <section style={{ padding: '80px 24px', textAlign: 'center', position: 'relative' }}>
         <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.3em', textTransform: 'uppercase', color: P.cyan, marginBottom: 32 }}>T-Minus Launch</p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 24, flexWrap: 'wrap' }}>
-          {[['Days', cd.d], ['Hours', cd.h], ['Minutes', cd.m], ['Seconds', cd.s]].map(([l, v]) => (
-            <div key={l} style={{ textAlign: 'center' }}>
-              <div style={{ width: 100, height: 100, borderRadius: 20, background: card, border: `2px solid ${P.bdr}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', boxShadow: `0 0 40px ${P.pri}20`, position: 'relative', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 8 : 24, flexWrap: 'nowrap', overflow: 'hidden' }}>
+          {[['Days', cd.d], ['Hours', cd.h], ['Min', cd.m], ['Sec', cd.s]].map(([l, v]) => (
+            <div key={l} style={{ textAlign: 'center', minWidth: 0 }}>
+              <div style={{ width: isMobile ? 70 : 100, height: isMobile ? 70 : 100, borderRadius: isMobile ? 12 : 20, background: card, border: `2px solid ${P.bdr}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', boxShadow: `0 0 40px ${P.pri}20`, position: 'relative', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', inset: 0, opacity: 0.1, background: `linear-gradient(45deg, transparent, ${P.cyan}, transparent)` }} />
-                <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '2.5rem', fontWeight: 700, color: p }}>{String(v).padStart(2, '0')}</span>
+                <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: isMobile ? '1.5rem' : '2.5rem', fontWeight: 700, color: p }}>{String(v).padStart(2, '0')}</span>
               </div>
-              <span style={{ fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.2em', color: mut }}>{l}</span>
+              <span style={{ fontSize: isMobile ? '0.6rem' : '0.7rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: mut, whiteSpace: 'nowrap' }}>{l}</span>
             </div>
           ))}
         </div>

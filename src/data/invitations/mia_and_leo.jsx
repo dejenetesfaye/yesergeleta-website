@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sun, Moon, MapPin, Music, Volume2, VolumeX, ChevronDown, ChevronUp, Send, QrCode, Play, Pause } from 'lucide-react';
+import { Heart, Sun, Moon, MapPin, Music, Volume2, VolumeX, ChevronDown, ChevronUp, Send, QrCode, Play, Pause, Menu, X } from 'lucide-react';
 
 /* ─── COLOUR PALETTE ─── */
 const P = {
@@ -180,7 +180,23 @@ function Wishes({ dark }) {
 export default function MiaAndLeo() {
   const [dark, setDark] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [navOpen, setNavOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    
+    handleScroll();
+    handleResize();
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   const cd = useCountdown('2026-08-22T16:00:00');
 
   useEffect(()=>{ const fn=()=>setScrolled(window.scrollY>60); window.addEventListener('scroll',fn); return ()=>window.removeEventListener('scroll',fn); },[]);
@@ -192,6 +208,7 @@ export default function MiaAndLeo() {
   const txt  = dark ? P.txtD  : P.txt;
   const mut  = dark ? P.mutD  : P.mut;
   const bdr  = dark ? P.bdrD  : P.bdr;
+  const p    = dark ? P.priD  : P.pri;
 
   const S = (style) => ({ fontFamily:"'Cormorant Garamond',serif", ...style });
   const navLinks = ['About','Story','Events','Locations','Bridal Party','Gallery','Wishes','RSVP'];
@@ -201,18 +218,44 @@ export default function MiaAndLeo() {
       <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Bellefair&display=swap" rel="stylesheet"/>
 
       {/* ── NAV ── */}
-      <nav style={{ position:'fixed', top:0, left:0, right:0, zIndex:50, background:scrolled?(dark?'rgba(26,16,4,0.95)':'rgba(253,246,236,0.95)'):'transparent', backdropFilter:scrolled?'blur(10px)':'none', borderBottom:scrolled?`1px solid ${bdr}`:'none', transition:'all 0.4s', padding:'0 32px', height:68, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-        <span style={{ fontFamily:"'Playfair Display',serif", fontSize:'1.5rem', fontStyle:'italic', color:pri }}>Mia & Leo</span>
-        <div style={{ display:'flex', gap:24, alignItems:'center' }}>
-          <div style={{ display:'flex', gap:20 }}>
-            {navLinks.map(l=>(
-              <a key={l} href={`#${l.toLowerCase().replace(' ','-')}`} style={{ fontSize:'0.7rem', textTransform:'uppercase', letterSpacing:'0.15em', fontFamily:"'Bellefair',serif", color:mut, textDecoration:'none' }}>{l}</a>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, background: scrolled ? (dark ? 'rgba(26,16,4,0.95)' : 'rgba(253,246,236,0.95)') : 'transparent', backdropFilter: scrolled ? 'blur(10px)' : 'none', borderBottom: scrolled ? `1px solid ${bdr}` : 'none', transition: 'all 0.4s', padding: isMobile ? '0 20px' : '0 32px', height: isMobile ? 60 : 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.1rem' : '1.3rem', fontWeight: 700, color: pri }}>M & L</span>
+        </div>
+
+        {!isMobile ? (
+          <div style={{ display: 'flex', gap: 24 }}>
+            {navLinks.map(l => (
+              <a key={l} href={`#${l.toLowerCase().replace(' ', '')}`} style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: mut, textDecoration: 'none' }}>{l}</a>
             ))}
           </div>
-          <button onClick={()=>setDark(!dark)} style={{ background:'none', border:`1px solid ${bdr}`, borderRadius:'50%', width:36, height:36, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color:pri }}>
-            {dark?<Sun size={15}/>:<Moon size={15}/>}
+        ) : (
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', color: pri, cursor: 'pointer', padding: 8 }}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={() => setDark(!dark)} style={{ background: 'none', border: 'none', color: pri, cursor: 'pointer' }}>
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
+
+        {/* Mobile Dropdown */}
+        <AnimatePresence>
+          {isMobile && menuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              style={{ position: 'absolute', top: 60, left: 0, right: 0, background: dark ? '#1A1004' : '#FDF6EC', borderBottom: `1px solid ${bdr}`, padding: '20px', display: 'flex', flexDirection: 'column', gap: 16, zIndex: 999 }}
+            >
+              {navLinks.map(l => (
+                <a key={l} href={`#${l.toLowerCase().replace(' ', '')}`} onClick={() => setMenuOpen(false)} style={{ fontSize: '0.9rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: txt, textDecoration: 'none', textAlign: 'center' }}>{l}</a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* ── HERO ── */}
@@ -235,13 +278,13 @@ export default function MiaAndLeo() {
       <section style={{ padding:'80px 24px', background:dark?'#1E1408':'#FFFBF5', textAlign:'center' }}>
         <p style={{ fontFamily:"'Bellefair',serif", fontSize:'0.7rem', textTransform:'uppercase', letterSpacing:'0.3em', color:P.gold, marginBottom:8 }}>The Big Day Approaches</p>
         <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:'2rem', fontStyle:'italic', color:pri, marginBottom:36 }}>Counting Down to Forever</h2>
-        <div style={{ display:'flex', justifyContent:'center', gap:28, flexWrap:'wrap' }}>
-          {[['Days',cd.d],['Hours',cd.h],['Minutes',cd.m],['Seconds',cd.s]].map(([l,v])=>(
-            <div key={l} style={{ textAlign:'center' }}>
-              <div style={{ width:88, height:88, borderRadius:'50%', border:`2px solid ${P.gold}`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 10px', background:card, boxShadow:`0 4px 20px rgba(200,169,126,0.2)` }}>
-                <span style={{ fontFamily:"'Playfair Display',serif", fontSize:'2rem', fontWeight:700, color:pri }}>{String(v).padStart(2,'0')}</span>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 12 : 28, flexWrap: 'nowrap', overflow: 'hidden' }}>
+          {[['Days', cd.d], ['Hours', cd.h], ['Min', cd.m], ['Sec', cd.s]].map(([l, v]) => (
+            <div key={l} style={{ textAlign: 'center', minWidth: 0 }}>
+              <div style={{ width: isMobile ? 70 : 88, height: isMobile ? 70 : 88, borderRadius: '50%', border: `2px solid ${P.gold}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', background: card, boxShadow: `0 4px 20px rgba(200,169,126,0.2)` }}>
+                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.5rem' : '2rem', fontWeight: 700, color: pri }}>{String(v).padStart(2, '0')}</span>
               </div>
-              <span style={{ fontFamily:"'Bellefair',serif", fontSize:'0.65rem', textTransform:'uppercase', letterSpacing:'0.25em', color:mut }}>{l}</span>
+              <span style={{ fontFamily: "'Bellefair', serif", fontSize: isMobile ? '0.55rem' : '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: mut, whiteSpace: 'nowrap' }}>{l}</span>
             </div>
           ))}
         </div>
