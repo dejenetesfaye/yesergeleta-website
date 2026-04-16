@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
+import { Heart, Sun, Moon, MapPin, Play, Pause, Volume2, VolumeX, Send, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
 
 /* ─── COLOUR PALETTE (Vintage Retro) ─── */
 const P = {
@@ -40,11 +40,12 @@ function MusicPlayer({ dark }) {
         ref.current.play().then(() => setP(true)).catch(() => { });
       }
     };
-    // Attempt play immediately, fallback to event listeners
-    fn();
+    // Interaction listeners for modern browsers
+    window.addEventListener('scroll', fn, { once: true });
     window.addEventListener('click', fn, { once: true });
     window.addEventListener('touchstart', fn, { once: true });
     return () => {
+      window.removeEventListener('scroll', fn);
       window.removeEventListener('click', fn);
       window.removeEventListener('touchstart', fn);
     };
@@ -62,7 +63,7 @@ function MusicPlayer({ dark }) {
   };
   return (
     <>
-      <audio ref={ref} loop muted={mute} autoPlay src="/images/Nardi and abel/Michael%20Bubl%C3%A9%20-%20Feeling%20Good%20(mp3cut.net).mp3" />
+      <audio ref={ref} loop muted={mute} src="/images/Nardi and abel/Michael%20Bubl%C3%A9%20-%20Feeling%20Good%20(mp3cut.net).mp3" />
       <div style={{ position: 'fixed', bottom: 24, right: 80, zIndex: 100, display: 'flex', gap: 8 }}>
         <button onClick={toggle} style={{ width: 44, height: 44, borderRadius: '50%', background: p, color: 'white', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
           {play ? <Pause size={18} /> : <Play size={18} />}
@@ -180,6 +181,9 @@ export default function AbelAndNardi() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [isOpened, setIsOpened] = useState(false);
+  const [hasEntered, setHasEntered] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -208,6 +212,151 @@ export default function AbelAndNardi() {
   return (
     <div style={{ background: bg, color: txt, minHeight: '100vh', fontFamily: "'Cormorant Garamond',Georgia,serif", transition: 'all 0.4s' }}>
       <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Bellefair&display=swap" rel="stylesheet" />
+
+      {/* ── PRE-LOADER / ENVELOPE SPLASH ── */}
+      <AnimatePresence>
+        {!hasEntered && (
+          <motion.div
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 1.2, ease: 'easeInOut' }}
+            style={{ position: 'fixed', inset: 0, zIndex: 10000, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(ellipse at center, #2C1A0A 0%, #0D0804 100%)' }}
+          >
+            {/* Ambient particle dots */}
+            {[...Array(8)].map((_, i) => (
+              <motion.div key={i}
+                animate={{ y: [0, -20, 0], opacity: [0.15, 0.45, 0.15] }}
+                transition={{ duration: 3 + i * 0.4, repeat: Infinity, delay: i * 0.3 }}
+                style={{ position: 'absolute', width: i % 2 === 0 ? 3 : 2, height: i % 2 === 0 ? 3 : 2, borderRadius: '50%', background: P.gold, left: `${8 + i * 10}%`, top: `${15 + (i % 4) * 18}%` }}
+              />
+            ))}
+
+            {/* Title above envelope */}
+            <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }}
+              style={{ textAlign: 'center', marginBottom: 52, zIndex: 2 }}
+            >
+              <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', letterSpacing: '0.5em', textTransform: 'uppercase', color: P.gold, marginBottom: 12 }}>
+                You are cordially invited
+              </p>
+              <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: isMobile ? '2rem' : '3rem', fontStyle: 'italic', color: '#FDF6EC', margin: 0, fontWeight: 400, lineHeight: 1.1 }}>
+                Abel & Nardi
+              </h1>
+              <div style={{ width: 60, height: 1, background: `linear-gradient(to right, transparent, ${P.gold}, transparent)`, margin: '16px auto 0' }} />
+            </motion.div>
+
+            {/* Envelope wrapper — matches reference CSS structure */}
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: isOpened ? 50 : 0, opacity: 1 }}
+              transition={{ delay: isOpened ? 0 : 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              style={{ position: 'relative', width: isMobile ? 300 : 480, height: isMobile ? 200 : 300, zIndex: 2 }}
+            >
+              {/* ── back-fold: rectangle behind everything ── */}
+              <div style={{
+                position: 'absolute', bottom: 0, left: 0, right: 0,
+                height: '67%',
+                background: 'linear-gradient(160deg, #C8A97E 0%, #B8924A 100%)',
+                borderRadius: '0 0 4px 4px',
+                zIndex: 0,
+              }} />
+
+              {/* ── letter: the invitation card, sits inside, slides UP on open ── */}
+              <motion.div
+                animate={{ height: isOpened ? '140%' : '40%' }}
+                transition={{ delay: isOpened ? 0.4 : 0, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  position: 'absolute', bottom: 0, left: '10%', right: '10%',
+                  height: '40%',
+                  background: 'linear-gradient(160deg, #FFFEF9 0%, #FFF8EE 100%)',
+                  border: `1px solid ${P.bdr}`,
+                  borderRadius: 3,
+                  zIndex: 1,
+                  overflow: 'hidden',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                  gap: 6,
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.18)',
+                  padding: isMobile ? '10px' : '16px',
+                }}
+              >
+                <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.55rem', letterSpacing: '0.35em', color: P.gold, textTransform: 'uppercase', margin: 0 }}>Wedding Invitation</p>
+                <div style={{ width: 38, height: 1, background: `linear-gradient(to right, transparent, ${P.gold}, transparent)` }} />
+                <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: isMobile ? '1rem' : '1.5rem', fontStyle: 'italic', margin: 0, color: P.pri, textAlign: 'center', lineHeight: 1.2 }}>Abel & Nardi</h3>
+                <div style={{ width: 38, height: 1, background: `linear-gradient(to right, transparent, ${P.gold}, transparent)` }} />
+                <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: isMobile ? '0.7rem' : '0.85rem', margin: 0, color: P.mut, fontStyle: 'italic' }}>May 2, 2026</p>
+              </motion.div>
+
+              {/* ── top-fold: the animated flap, triangle pointing DOWN ── */}
+              <motion.div
+                initial={{ rotateX: 0, zIndex: 4 }}
+                animate={{
+                  rotateX: isOpened ? 180 : 0,
+                  zIndex: isOpened ? 0 : 4,
+                }}
+                transition={{
+                  rotateX: { duration: 0.5, delay: isOpened ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] },
+                  zIndex: { delay: isOpened ? 0.2 : 0.3 },
+                }}
+                style={{
+                  position: 'absolute', top: '33%', left: 0, right: 0, height: 0,
+                  borderStyle: 'solid',
+                  borderWidth: `${isMobile ? 67 : 100}px ${isMobile ? 150 : 240}px 0 ${isMobile ? 150 : 240}px`,
+                  borderColor: `${P.gold} transparent transparent transparent`,
+                  transformOrigin: '50% 0%',
+                }}
+              />
+
+              {/* ── body: front face triangle covering the bottom ── */}
+              <div style={{
+                position: 'absolute', bottom: 0, left: 0, width: 0, height: 0,
+                borderStyle: 'solid',
+                borderWidth: `0 0 ${isMobile ? 133 : 200}px ${isMobile ? 300 : 480}px`,
+                borderColor: `transparent transparent #D4A76A transparent`,
+                zIndex: 2,
+                borderRadius: '0 0 4px 0',
+              }} />
+
+              {/* ── left-fold: left side triangle ── */}
+              <div style={{
+                position: 'absolute', bottom: 0, left: 0, width: 0, height: 0,
+                borderStyle: 'solid',
+                borderWidth: `${isMobile ? 67 : 100}px 0 ${isMobile ? 67 : 100}px ${isMobile ? 150 : 240}px`,
+                borderColor: `transparent transparent transparent #C8A060`,
+                zIndex: 2,
+              }} />
+
+              {/* ── WAX SEAL — positioned at center of envelope ── */}
+              <div style={{ position: 'absolute', left: '50%', top: '60%', transform: 'translate(-50%, -50%)', zIndex: 20 }}>
+                <motion.div
+                  animate={{ scale: isOpened ? 0 : 1, opacity: isOpened ? 0 : 1 }}
+                  transition={{ duration: 0.25 }}
+                  onClick={() => { setIsOpened(true); setTimeout(() => setHasEntered(true), 2700); }}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}
+                >
+                  <div style={{ position: 'relative', width: isMobile ? 70 : 90, height: isMobile ? 70 : 90 }}>
+                    <img
+                      src="/images/Nardi and abel/wax seal.png"
+                      alt="Open Invitation"
+                      style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', filter: 'drop-shadow(0 4px 14px rgba(0,0,0,0.65))' }}
+                    />
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+                      <span style={{ fontFamily: "'Playfair Display',serif", fontSize: isMobile ? '0.75rem' : '0.9rem', fontStyle: 'italic', fontWeight: 700, color: '#FFF8E8', letterSpacing: '0.04em', textShadow: '0 1px 4px rgba(0,0,0,0.7)', lineHeight: 1, userSelect: 'none' }}>A & N</span>
+                    </div>
+                  </div>
+                  <p style={{ marginTop: 10, fontFamily: "'Bellefair',serif", color: 'rgba(255,235,190,0.75)', whiteSpace: 'nowrap', textTransform: 'uppercase', letterSpacing: '0.3em', fontSize: '0.6rem', textAlign: 'center', pointerEvents: 'none' }}>
+                    Open Invitation
+                  </p>
+                </motion.div>
+              </div>
+            </motion.div>{/* end envelope wrapper */}
+
+            {/* Shadow under envelope */}
+            <motion.div
+              animate={{ width: isOpened ? 200 : 350, opacity: isOpened ? 0.2 : 0.5 }}
+              transition={{ duration: 0.5 }}
+              style={{ width: 350, height: 24, borderRadius: '50%', background: 'radial-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0), rgba(0,0,0,0))', marginTop: 12, zIndex: 1 }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
 
 
@@ -315,9 +464,9 @@ export default function AbelAndNardi() {
           <div style={{ marginTop: 40, position: 'relative' }}>
             <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 2, background: `linear-gradient(to bottom,transparent,${P.gold},transparent)`, transform: 'translateX(-50%)', pointerEvents: 'none' }} />
             {[
-              { year: '2022', title: 'The First Meeting', desc: 'A serendipitous moment that changed everything. They discovered a shared passion for life\'s beautiful details and a connection like no other.', img: '/images/Nardi and abel/IMG_2377.PNG', side: 'left' },
+              { year: '2022', title: 'The First Meeting', desc: 'A serendipitous moment that changed everything. They discovered a shared passion for life\'s beautiful details and a connection like no other.', img: '/images/Nardi and abel/IMG_2375.PNG', side: 'left' },
               { year: '2024', title: 'Growing Together', desc: 'Through shared adventures and quiet moments, their love grew into a sanctuary. A promise made to always be each other\'s greatest supporter.', img: '/images/Nardi and abel/IMG_2376.PNG', side: 'right' },
-              { year: '2025', title: 'The Proposal', desc: 'On a day filled with magic, Abel asked Nardi to spend forever with him. Surrounded by beauty, she happily said yes.', img: '/images/Nardi and abel/IMG_2368.PNG', side: 'left' },
+              { year: '2025', title: 'The Proposal', desc: 'On a day filled with magic, Abel asked Nardi to spend forever with him. Surrounded by beauty, she happily said yes.', img: '/images/Nardi and abel/IMG_2371.PNG', side: 'left' },
               { year: '2026', title: 'Forever Begins', desc: 'Today, they invite you to witness the beginning of their journey as husband and wife.', img: '/images/Nardi and abel/IMG_2378.PNG', side: 'right' },
             ].map((item, i) => (
               <motion.div key={i} initial={{ opacity: 0, x: item.side === 'left' ? -40 : 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
@@ -413,38 +562,64 @@ export default function AbelAndNardi() {
       </section>
 
       {/* ── GALLERY ── */}
-      <section id="gallery" style={{ padding: '80px 24px', background: dark ? '#1E1408' : '#FFF5E8' }}>
-        <div style={{ maxWidth: 1000, margin: '0 auto', textAlign: 'center' }}>
+      <section id="gallery" style={{ padding: '80px 24px', background: dark ? '#1E1408' : '#FFF5E8', overflow: 'hidden' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
           <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8 }}>Captured Moments</p>
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.5rem', fontStyle: 'italic', color: pri }}>Our Gallery</h2>
           <OrnDivider gold={P.gold} />
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(240px,1fr))', gap: 12, marginTop: 32 }}>
-            {[
-              '/images/Nardi and abel/IMG_2350.PNG',
-              '/images/Nardi and abel/IMG_2351.PNG',
-              '/images/Nardi and abel/IMG_2352.PNG',
-              '/images/Nardi and abel/IMG_2353.PNG',
-              '/images/Nardi and abel/IMG_2355.PNG',
-              '/images/Nardi and abel/IMG_2356.PNG',
-              '/images/Nardi and abel/IMG_2358.PNG',
-              '/images/Nardi and abel/IMG_2360.PNG',
-              '/images/Nardi and abel/IMG_2361.PNG',
-              '/images/Nardi and abel/IMG_2362.PNG',
-              '/images/Nardi and abel/IMG_2363.PNG',
-              '/images/Nardi and abel/IMG_2364.PNG',
-              '/images/Nardi and abel/IMG_2367.PNG',
-              '/images/Nardi and abel/IMG_2368.PNG',
-              '/images/Nardi and abel/IMG_2369.PNG',
-              '/images/Nardi and abel/IMG_2371.PNG',
-              '/images/Nardi and abel/IMG_2375.PNG',
-              '/images/Nardi and abel/IMG_2376.PNG',
-              '/images/Nardi and abel/IMG_2377.PNG',
-              '/images/Nardi and abel/IMG_2378.PNG'
-            ].map((img, i) => (
-              <motion.div key={i} whileHover={{ scale: 1.03 }} style={{ borderRadius: 10, overflow: 'hidden', aspectRatio: i % 3 === 0 ? '3/4' : '4/3', border: `3px solid ${card}`, boxShadow: `0 4px 16px rgba(0,0,0,0.08)` }}>
-                <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+
+          <div style={{ position: 'relative', marginTop: 40, padding: isMobile ? '0' : '0 60px' }}>
+            {/* Slider Container */}
+            <div style={{ overflow: 'hidden' }}>
+              <motion.div
+                animate={{ x: `-${(galleryIndex * (100 / (isMobile ? 1 : 3)))}%` }}
+                transition={{ type: 'spring', damping: 25, stiffness: 120 }}
+                style={{ display: 'flex', gap: 20 }}
+              >
+                {[
+                  '/images/Nardi and abel/IMG_2350.PNG',
+                  '/images/Nardi and abel/IMG_2351.PNG',
+                  '/images/Nardi and abel/IMG_2352.PNG',
+                  '/images/Nardi and abel/IMG_2353.PNG',
+                  '/images/Nardi and abel/IMG_2355.PNG',
+                  '/images/Nardi and abel/IMG_2356.PNG',
+                  '/images/Nardi and abel/IMG_2358.PNG',
+                  '/images/Nardi and abel/IMG_2360.PNG',
+                  '/images/Nardi and abel/IMG_2361.PNG',
+                  '/images/Nardi and abel/IMG_2362.PNG',
+                  '/images/Nardi and abel/IMG_2363.PNG',
+                  '/images/Nardi and abel/IMG_2364.PNG',
+                  '/images/Nardi and abel/IMG_2367.PNG',
+                  '/images/Nardi and abel/IMG_2368.PNG',
+                  '/images/Nardi and abel/IMG_2369.PNG',
+                  '/images/Nardi and abel/IMG_2371.PNG',
+                  '/images/Nardi and abel/IMG_2375.PNG',
+                  '/images/Nardi and abel/IMG_2376.PNG',
+                  '/images/Nardi and abel/IMG_2377.PNG',
+                  '/images/Nardi and abel/IMG_2378.PNG'
+                ].map((img, i) => (
+                  <div key={i} style={{ flex: `0 0 calc(${100 / (isMobile ? 1 : 3)}% - ${isMobile ? 0 : 14}px)`, aspectRatio: '4/5', borderRadius: 12, overflow: 'hidden', border: `3px solid ${card}`, boxShadow: `0 4px 16px rgba(0,0,0,0.08)` }}>
+                    <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                ))}
               </motion.div>
-            ))}
+            </div>
+
+            {/* Controls */}
+            <button
+              onClick={() => setGalleryIndex(prev => Math.max(0, prev - 1))}
+              disabled={galleryIndex === 0}
+              style={{ position: 'absolute', left: isMobile ? 10 : 0, top: '50%', transform: 'translateY(-50%)', width: 44, height: 44, borderRadius: '50%', background: card, border: `1px solid ${bdr}`, color: pri, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: galleryIndex === 0 ? 'default' : 'pointer', opacity: galleryIndex === 0 ? 0.3 : 1, zIndex: 10, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={() => setGalleryIndex(prev => Math.min(17, prev + 1))}
+              disabled={galleryIndex >= (isMobile ? 19 : 17)}
+              style={{ position: 'absolute', right: isMobile ? 10 : 0, top: '50%', transform: 'translateY(-50%)', width: 44, height: 44, borderRadius: '50%', background: card, border: `1px solid ${bdr}`, color: pri, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: galleryIndex >= (isMobile ? 19 : 17) ? 'default' : 'pointer', opacity: galleryIndex >= (isMobile ? 19 : 17) ? 0.3 : 1, zIndex: 10, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+            >
+              <ChevronRight size={20} />
+            </button>
           </div>
         </div>
       </section>
