@@ -209,6 +209,8 @@ export default function AbelAndNardi() {
     <div style={{ background: bg, color: txt, minHeight: '100vh', fontFamily: "'Cormorant Garamond',Georgia,serif", transition: 'all 0.4s' }}>
       <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Bellefair&display=swap" rel="stylesheet" />
 
+
+
       {/* ── NAV ── */}
       <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, background: scrolled ? (dark ? 'rgba(26,16,4,0.95)' : 'rgba(253,246,236,0.95)') : 'transparent', backdropFilter: scrolled ? 'blur(10px)' : 'none', borderBottom: scrolled ? `1px solid ${bdr}` : 'none', transition: 'all 0.4s', padding: isMobile ? '0 20px' : '0 32px', height: isMobile ? 60 : 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.1rem' : '1.3rem', fontWeight: 700, color: pri }}>A & N</span>
@@ -451,9 +453,9 @@ export default function AbelAndNardi() {
       <section style={{ padding: '80px 24px', textAlign: 'center' }}>
         <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8 }}>A Glimpse of Our Love</p>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.5rem', fontStyle: 'italic', color: pri, marginBottom: 32 }}>Our Story in Motion</h2>
-        <div style={{ maxWidth: 800, margin: '0 auto', borderRadius: 12, overflow: 'hidden', border: `4px solid ${card}`, boxShadow: `0 8px 40px rgba(0,0,0,0.15)`, position: 'relative', background: '#000' }}>
-          <video controls style={{ width: '100%', display: 'block' }}>
-            <source src="/images/Nardi and abel/May 2,2026❤️.mp4" type="video/mp4" />
+        <div style={{ maxWidth: 650, maxHeight: 500, margin: '0 auto', borderRadius: 12, overflow: 'hidden', border: `4px solid ${card}`, boxShadow: `0 8px 40px rgba(0,0,0,0.15)`, position: 'relative', background: '#000' }}>
+          <video controls style={{ width: '100%', maxHeight: 500, display: 'block', objectFit: 'contain' }}>
+            <source src="/images/Nardi and abel/❤️Twice_over_June_26th_ended_up_as_the_most_meaningful_day_of_my.mp4" type="video/mp4" />
           </video>
         </div>
       </section>
