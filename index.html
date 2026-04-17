@@ -53,6 +53,10 @@
     <main>
       <!-- Hero Section -->
       <section class="hero">
+        <video autoplay loop muted playsinline class="hero-video-bg">
+          <source src="/images/vidio for hero.mp4" type="video/mp4">
+        </video>
+        <div class="hero-gradient-overlay"></div>
         <div class="container hero-content">
           <h1 class="reveal" data-i18n="hero.title">Create Your Dream Digital Wedding Invitation</h1>
           <p class="reveal hidden md:block" data-i18n="hero.subtitle">Elegant, responsive, and culturally inspired
@@ -61,7 +65,7 @@
             story with a touch of modern luxury.</p>
           <div class="btn-group reveal">
             <a href="#themes" class="btn btn-primary" data-i18n="hero.browseThemes">Browse Themes</a>
-            <a href="#order" class="btn btn-outline" data-i18n="hero.startOrder">Start Order</a>
+            <a href="#order" class="btn btn-outline btn-outline-hero" data-i18n="hero.startOrder">Start Order</a>
           </div>
         </div>
       </section>
@@ -252,28 +256,25 @@
         </div>
       </div>
 
-      <!-- Categories Section -->
-      <section class="categories">
+      <!-- Stats Counter Section -->
+      <section class="stats-section">
         <div class="container">
-          <div class="section-header reveal">
-            <h2 data-i18n="categories.title">Browse by Category</h2>
-          </div>
-          <div class="category-grid reveal">
-            <div class="cat-card">
-              <div class="cat-icon"><i data-lucide="award"></i></div>
-              <h3 data-i18n="categories.luxury">Luxury</h3>
+          <div class="stats-grid reveal">
+            <div class="stat-item">
+              <div class="stat-number" data-target="50">0</div>
+              <div class="stat-label">Happy Couples</div>
             </div>
-            <div class="cat-card">
-              <div class="cat-icon"><i data-lucide="palmtree"></i></div>
-              <h3 data-i18n="categories.cultural">Cultural</h3>
+            <div class="stat-item">
+              <div class="stat-number" data-target="8">0</div>
+              <div class="stat-label">Premium Themes</div>
             </div>
-            <div class="cat-card">
-              <div class="cat-icon"><i data-lucide="layers"></i></div>
-              <h3 data-i18n="categories.minimalist">Minimalist</h3>
+            <div class="stat-item">
+              <div class="stat-number" data-target="10000">0</div>
+              <div class="stat-label">Invitations Sent</div>
             </div>
-            <div class="cat-card">
-              <div class="cat-icon"><i data-lucide="heart"></i></div>
-              <h3 data-i18n="categories.modern">Modern</h3>
+            <div class="stat-item">
+              <div class="stat-number" data-target="100">0</div>
+              <div class="stat-label">Satisfaction Rate</div>
             </div>
           </div>
         </div>
@@ -343,6 +344,57 @@
                 <p>Beautifully display your bridesmaids and groomsmen with photos and messages.</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials Section -->
+      <section id="testimonials" class="testimonials-section">
+        <div class="container">
+          <div class="section-header reveal">
+            <h2>What Our Couples Say</h2>
+            <p>Hear from the couples who celebrated their love with Yesergeleta.</p>
+          </div>
+          <div class="testimonials-slider reveal">
+            <div class="testimonial-track" id="testimonial-track">
+              <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Yesergeleta made our wedding invitation absolutely stunning. Our guests
+                  couldn't stop talking about how beautiful and unique it was!"</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">A&N</div>
+                  <div>
+                    <h4>Abel & Nardi</h4>
+                    <span>May 2026</span>
+                  </div>
+                </div>
+              </div>
+              <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"The team was incredibly professional and creative. They captured our love
+                  story perfectly in a digital masterpiece."</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">S&D</div>
+                  <div>
+                    <h4>Selam & Dawit</h4>
+                    <span>October 2026</span>
+                  </div>
+                </div>
+              </div>
+              <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"From the first meeting to the final product, everything was seamless. Our
+                  Habesha-inspired invitation was a true work of art."</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">M&S</div>
+                  <div>
+                    <h4>Miriam & Solomon</h4>
+                    <span>December 2026</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-dots" id="testimonial-dots"></div>
           </div>
         </div>
       </section>
@@ -429,6 +481,7 @@
               <a href="#order" class="btn btn-outline" data-i18n="pricing.btnTier2">Choose Elegant</a>
             </div>
             <div class="price-card popular reveal">
+              <div class="popular-badge">Most Popular</div>
               <div class="price-header">
                 <h3 data-i18n="pricing.tier3Title">Royal</h3>
                 <div class="price-val" data-i18n="pricing.tier3Price">17,000 ETB</div>
@@ -504,12 +557,14 @@
                 <div class="form-group">
                   <label data-i18n="order.theme">Selected Theme</label>
                   <select id="order-theme">
-                    <option>White Horse</option>
-                    <option>Luxury</option>
-                    <option>Royal</option>
-                    <option>Floral Romance</option>
-                    <option>Essential Gold</option>
-                    <option>Full Gold</option>
+                    <option>Luxury Magazine</option>
+                    <option>Aurora Glass</option>
+                    <option>Vintage Retro</option>
+                    <option>Midnight Noir</option>
+                    <option>Liquid Blob</option>
+                    <option>Celestial Cosmos</option>
+                    <option>Royal Habesha</option>
+                    <option>Golden Meskel</option>
                   </select>
                 </div>
                 <div class="form-group full">
@@ -593,7 +648,7 @@
         <div class="footer-grid">
           <div class="footer-col">
             <a href="#" class="logo" style="margin-bottom: 20px;">
-              <img src="/images/logo.png" alt="Yesergeleta Logo" style="height: 200px;">
+              <img src="/images/logo.png" alt="Yesergeleta Logo" style="height: 80px;">
             </a>
             <p>Crafting dream digital invitations for your most memorable moments.</p>
             <div class="social-links">
@@ -663,20 +718,64 @@
       themeToggleBtn.addEventListener('click', () => {
         landingPageDiv.classList.toggle('dark-mode');
         const isDark = landingPageDiv.classList.contains('dark-mode');
-
-        // Update icon
         themeToggleBtn.innerHTML = isDark
           ? '<i data-lucide="sun"></i>'
           : '<i data-lucide="moon"></i>';
-
-        // Re-initialize icons
-        if (typeof lucide !== 'undefined') {
-          lucide.createIcons();
-        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
       });
     }
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Scroll-triggered counter animation
+    function animateCounters() {
+      const counters = document.querySelectorAll('.stat-number');
+      counters.forEach(counter => {
+        const target = +counter.dataset.target;
+        const suffix = target === 100 ? '%' : '+';
+        const duration = 2000;
+        const startTime = performance.now();
+        function update(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          counter.textContent = Math.floor(eased * target) + suffix;
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+      });
+    }
+
+    // IntersectionObserver for stats and reveal animations
+    const statsSection = document.querySelector('.stats-section');
+    let statsAnimated = false;
+    const statsObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !statsAnimated) {
+        statsAnimated = true;
+        animateCounters();
+      }
+    }, { threshold: 0.4 });
+    if (statsSection) statsObserver.observe(statsSection);
+
+    // Testimonials auto-slide
+    const track = document.getElementById('testimonial-track');
+    const dotsContainer = document.getElementById('testimonial-dots');
+    if (track && dotsContainer) {
+      const cards = track.querySelectorAll('.testimonial-card');
+      let current = 0;
+      cards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'testimonial-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
+      });
+      function goTo(idx) {
+        current = idx;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dotsContainer.querySelectorAll('.testimonial-dot').forEach((d, i) =>
+          d.classList.toggle('active', i === current)
+        );
+      }
+      setInterval(() => goTo((current + 1) % cards.length), 5000);
     }
   </script>
   <script type="module" src="/src/main.jsx"></script>
