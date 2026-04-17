@@ -108,7 +108,6 @@ function FAQ({ dark }) {
   return (
     <section id="faq" style={{ padding: '80px 24px', background: dark ? '#1E1408' : '#FFFBF5' }}>
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
-        <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8, textAlign: 'center' }}>Questions & Answers</p>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.2rem', fontStyle: 'italic', color: pri, marginBottom: 8, textAlign: 'center' }}>Frequently Asked</h2>
         <OrnDivider gold={P.gold} />
         <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -152,7 +151,6 @@ function Wishes({ dark }) {
   return (
     <section id="wishes" style={{ padding: '80px 24px', background: dark ? '#1E1408' : '#FFF8F0' }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
-        <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8, textAlign: 'center' }}>Leave a Message</p>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.2rem', fontStyle: 'italic', color: pri, textAlign: 'center' }}>Blessings & Wishes</h2>
         <OrnDivider gold={P.gold} />
         <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
@@ -324,7 +322,7 @@ export default function AbelAndNardi() {
               }} />
 
               {/* ── WAX SEAL — positioned at center of envelope ── */}
-              <div style={{ position: 'absolute', left: '50%', top: '60%', transform: 'translate(-50%, -50%)', zIndex: 20 }}>
+              <div style={{ position: 'absolute', left: '50%', top: '70%', transform: 'translate(-50%, -50%)', zIndex: 20 }}>
                 <motion.div
                   animate={{ scale: isOpened ? 0 : 1, opacity: isOpened ? 0 : 1 }}
                   transition={{ duration: 0.25 }}
@@ -341,7 +339,7 @@ export default function AbelAndNardi() {
                       <span style={{ fontFamily: "'Playfair Display',serif", fontSize: isMobile ? '0.75rem' : '0.9rem', fontStyle: 'italic', fontWeight: 700, color: '#FFF8E8', letterSpacing: '0.04em', textShadow: '0 1px 4px rgba(0,0,0,0.7)', lineHeight: 1, userSelect: 'none' }}>A & N</span>
                     </div>
                   </div>
-                  <p style={{ marginTop: 10, fontFamily: "'Bellefair',serif", color: 'rgba(255,235,190,0.75)', whiteSpace: 'nowrap', textTransform: 'uppercase', letterSpacing: '0.3em', fontSize: '0.6rem', textAlign: 'center', pointerEvents: 'none' }}>
+                  <p style={{ marginTop: 10, fontFamily: "'Bellefair',serif", color: 'rgba(0, 0, 0, 0.75)', whiteSpace: 'nowrap', textTransform: 'uppercase', letterSpacing: '0.3em', fontSize: '0.6rem', textAlign: 'center', pointerEvents: 'none' }}>
                     Open Invitation
                   </p>
                 </motion.div>
@@ -413,7 +411,6 @@ export default function AbelAndNardi() {
 
       {/* ── COUNTDOWN ── */}
       <section style={{ padding: '80px 24px', background: dark ? '#1E1408' : '#FFFBF5', textAlign: 'center' }}>
-        <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8 }}>The Big Day Approaches</p>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2rem', fontStyle: 'italic', color: pri, marginBottom: 36 }}>Counting Down to Forever</h2>
         <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 12 : 28, flexWrap: 'nowrap', overflow: 'hidden' }}>
           {[['Days', cd.d], ['Hours', cd.h], ['Min', cd.m], ['Sec', cd.s]].map(([l, v]) => (
@@ -430,7 +427,6 @@ export default function AbelAndNardi() {
       {/* ── ABOUT US ── */}
       <section id="about" style={{ padding: '80px 24px', maxWidth: 1000, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 50 }}>
-          <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8 }}>Meet the Couple</p>
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.5rem', fontStyle: 'italic', color: pri }}>About Us</h2>
           <OrnDivider gold={P.gold} />
         </div>
@@ -458,7 +454,6 @@ export default function AbelAndNardi() {
       {/* ── OUR LOVE STORY ── */}
       <section id="story" style={{ padding: '80px 24px', background: dark ? '#1E1408' : '#FFF5E8' }}>
         <div style={{ maxWidth: 800, margin: '0 auto' }}>
-          <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8, textAlign: 'center' }}>How It All Began</p>
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.5rem', fontStyle: 'italic', color: pri, textAlign: 'center' }}>Our Love Story</h2>
           <OrnDivider gold={P.gold} />
           <div style={{ marginTop: 40, position: 'relative' }}>
@@ -519,7 +514,6 @@ export default function AbelAndNardi() {
       {/* ── LOCATIONS ── */}
       <section id="locations" style={{ padding: '80px 24px', background: dark ? '#1E1408' : '#FFF5E8' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-          <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8, textAlign: 'center' }}>Where to Find Us</p>
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.5rem', fontStyle: 'italic', color: pri, textAlign: 'center' }}>Event Locations</h2>
           <OrnDivider gold={P.gold} />
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 24, marginTop: 32 }}>
@@ -544,7 +538,6 @@ export default function AbelAndNardi() {
       {/* ── BRIDAL PARTY ── */}
       <section id="bridalparty" style={{ padding: '80px 24px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8, textAlign: 'center' }}>With Love & Gratitude</p>
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.5rem', fontStyle: 'italic', color: pri, textAlign: 'center' }}>The Bridal Party</h2>
           <OrnDivider gold={P.gold} />
           <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginTop: 30 }}>
@@ -564,7 +557,6 @@ export default function AbelAndNardi() {
       {/* ── GALLERY ── */}
       <section id="gallery" style={{ padding: '80px 24px', background: dark ? '#1E1408' : '#FFF5E8', overflow: 'hidden' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8 }}>Captured Moments</p>
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.5rem', fontStyle: 'italic', color: pri }}>Our Gallery</h2>
           <OrnDivider gold={P.gold} />
 
@@ -626,7 +618,6 @@ export default function AbelAndNardi() {
 
       {/* ── VIDEO ── */}
       <section style={{ padding: '80px 24px', textAlign: 'center' }}>
-        <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8 }}>A Glimpse of Our Love</p>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.5rem', fontStyle: 'italic', color: pri, marginBottom: 32 }}>Our Story in Motion</h2>
         <div style={{ maxWidth: 650, maxHeight: 500, margin: '0 auto', borderRadius: 12, overflow: 'hidden', border: `4px solid ${card}`, boxShadow: `0 8px 40px rgba(0,0,0,0.15)`, position: 'relative', background: '#000' }}>
           <video controls style={{ width: '100%', maxHeight: 500, display: 'block', objectFit: 'contain' }}>
@@ -637,12 +628,11 @@ export default function AbelAndNardi() {
 
       {/* ── TELEGRAM BOT ── */}
       <section style={{ padding: '60px 24px', background: dark ? '#1E1408' : '#FFF5E8', textAlign: 'center' }}>
-        <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8 }}>Stay Connected</p>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2rem', fontStyle: 'italic', color: pri, marginBottom: 16 }}>Chat With Us on Telegram</h2>
-        <p style={{ color: mut, fontStyle: 'italic', marginBottom: 24, maxWidth: 500, margin: '0 auto 24px' }}>Have a question? Reach us directly on Telegram — we reply with love. 💌</p>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2rem', fontStyle: 'italic', color: pri, marginBottom: 16 }}>Share Your Memories</h2>
+        <p style={{ color: mut, fontStyle: 'italic', marginBottom: 24, maxWidth: 500, margin: '0 auto 24px' }}>Express your love and blessings in messages, voice notes, photos, or videos, and help preserve the magic of this special day forever. 💌</p>
         <a href="https://t.me/yeserge_leta1" target="_blank" rel="noopener noreferrer"
           style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 28px', background: '#0088cc', color: 'white', borderRadius: 30, fontFamily: "'Bellefair',serif", fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.15em', textDecoration: 'none', boxShadow: '0 4px 20px rgba(0,136,204,0.35)' }}>
-          Message Us on Telegram
+          Telegram Bot
         </a>
       </section>
 
@@ -683,8 +673,7 @@ export default function AbelAndNardi() {
 
       {/* ── QR CODE ENTRY ── */}
       <section style={{ padding: '80px 24px', textAlign: 'center' }}>
-        <p style={{ fontFamily: "'Bellefair',serif", fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.3em', color: P.gold, marginBottom: 8 }}>Your Entry Pass</p>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.2rem', fontStyle: 'italic', color: pri, marginBottom: 16 }}>QR Code Entry</h2>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2.2rem', fontStyle: 'italic', color: pri, marginBottom: 16 }}>Have Your QR Code Entry</h2>
         <OrnDivider gold={P.gold} />
         <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: 24, background: card, borderRadius: 16, border: `2px solid ${bdr}`, boxShadow: `0 8px 40px rgba(200,169,126,0.2)` }}>
           <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('https://yesergeleta.com/entry?id=abel-nardi-2026&name=Guest')}&bgcolor=fff8f0&color=8B5E3C`} alt="QR Code" style={{ width: 200, height: 200, borderRadius: 8 }} />
